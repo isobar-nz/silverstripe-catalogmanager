@@ -1,0 +1,12 @@
+---
+Name: catalog-manager
+After: 'framework/*','cms/*'
+---
+LeftAndMain:
+  extra_requirements_css:
+    silverstripe-catalogmanager/css/menuhide.css:
+      media: all
+
+Page:
+  extensions:
+    - CategoryPageHierarchyExtension
