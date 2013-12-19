@@ -7,7 +7,7 @@ class CatalogPageAdmin extends ModelAdmin
     public function getEditForm($id = null, $fields = null)
     {
         $model = singleton($this->modelClass);
-        if ($model->has_extension('CatalogPageExtension')) {
+        if ($model->has_extension('CatalogPageExtension') || $model->has_extension('CatalogDataObjectExtension')) {
 
             $list = $this->getList()->setDataQueryParam(array(
                 'Versioned.stage' => 'Stage'

@@ -1,11 +1,11 @@
 <?php
 
-class CatalogPageGridFieldDetailForm extends GridFieldDetailForm
+class CatalogDataObjectGridFieldDetailForm extends GridFieldDetailForm
 {
 
 }
 
-class CatalogPageGridFieldDetailForm_ItemRequest extends GridFieldDetailForm_ItemRequest
+class CatalogDataObjectGridFieldDetailForm_ItemRequest extends GridFieldDetailForm_ItemRequest
 {
 
     private static $allowed_actions = array(
