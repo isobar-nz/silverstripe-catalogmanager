@@ -22,19 +22,21 @@ class CatalogPageGridFieldDetailForm_ItemRequest extends GridFieldDetailForm_Ite
 
             $actions = $form->Actions();
 
-            if ($this->record->isPublished()) {
-                $actions->push(
-                    FormAction::create('doDisable', 'Disable')
-                        ->setUseButtonTag(true)
-                        ->addExtraClass('ss-ui-action-destructive')
-                );
-            } else {
-                $actions->push(
-                    FormAction::create('doEnable', 'Enable')
-                        ->setUseButtonTag(true)
-                        ->addExtraClass('ss-ui-action-constructive')
-                        ->setAttribute('data-icon', 'accept')
-                );
+            if ($this->record->ID) {
+                if ($this->record->isPublished()) {
+                    $actions->push(
+                        FormAction::create('doDisable', 'Disable')
+                            ->setUseButtonTag(true)
+                            ->addExtraClass('ss-ui-action-destructive')
+                    );
+                } else {
+                    $actions->push(
+                        FormAction::create('doEnable', 'Enable')
+                            ->setUseButtonTag(true)
+                            ->addExtraClass('ss-ui-action-constructive')
+                            ->setAttribute('data-icon', 'accept')
+                    );
+                }
             }
 
             $form->setActions($actions);

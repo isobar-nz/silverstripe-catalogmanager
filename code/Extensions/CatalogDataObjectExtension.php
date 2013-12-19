@@ -109,10 +109,8 @@ class CatalogDataObjectExtension extends DataExtension
         $this->owner->publish("Stage", "Live");
 
         DB::query("UPDATE \"{$this->owner->ClassName}_Live\"
-			SET \"Sort\" = (SELECT \"{$this->owner->ClassName}\".\"Sort\" FROM \"{$this->owner->ClassName}\" WHERE \"{$this->owner->ClassName}_Live\".\"ID\" = \"{$this->owner->ClassName}_Live\".\"ID\")
-			WHERE EXISTS (SELECT \"{$this->owner->ClassName}_Live\".\"Sort\" FROM \"{$this->owner->ClassName}_Live\" WHERE \"{$this->owner->ClassName}_Live\".\"ID\" = \"{$this->owner->ClassName}_Live\".\"ID\")");
-
-
+			SET \"Sort\" = ( SELECT \"{$this->owner->ClassName}\".\"Sort\" FROM \"{$this->owner->ClassName}\" WHERE \"{$this->owner->ClassName}\".\"ID\" = \"{$this->owner->ClassName}_Live\".\"ID\")
+			WHERE EXISTS ( SELECT \"{$this->owner->ClassName}_Live\".\"Sort\" FROM \"{$this->owner->ClassName}\" WHERE \"{$this->owner->ClassName}\".\"ID\" = \"{$this->owner->ClassName}_Live\".\"ID\")");
 
         return true;
     }
