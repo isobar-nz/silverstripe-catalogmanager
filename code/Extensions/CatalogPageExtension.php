@@ -19,7 +19,7 @@ class CatalogPageExtension extends DataExtension
         $parentClass = $this->owner->stat('parentClass');
 
         if (class_exists($parentClass)) {
-            if ($pages = $parentClass::get()) {
+            if ($pages = $parentClass::get()->filter(array('ClassName' => $parentClass))) {
 
                 if ($pages->exists()) {
                     if ($pages->count() == 1) {
