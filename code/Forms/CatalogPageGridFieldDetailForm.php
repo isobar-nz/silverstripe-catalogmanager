@@ -14,6 +14,10 @@ class CatalogPageGridFieldDetailForm_ItemRequest extends GridFieldDetailForm_Ite
 
     function ItemEditForm()
     {
+        if (!$this->record->isPublished()) {
+            Versioned::reading_stage('Stage');
+        }
+
         $form = parent::ItemEditForm();
 
         if ($this->record->has_extension('CatalogPageExtension')
@@ -60,9 +64,10 @@ class CatalogPageGridFieldDetailForm_ItemRequest extends GridFieldDetailForm_Ite
 
     public function doSave($data, $form)
     {
+        $currentStage = Versioned::current_stage();
         Versioned::reading_stage('Stage');
         $action = parent::doSave($data, $form);
-        Versioned::reading_stage('Live');
+        Versioned::reading_stage($currentStage);
 
         if ($this->record->isPublished()) {
             $this->publish($data, $form);
@@ -77,15 +82,17 @@ class CatalogPageGridFieldDetailForm_ItemRequest extends GridFieldDetailForm_Ite
             $this->unpublish($data, $form);
         }
 
+        $currentStage = Versioned::current_stage();
         Versioned::reading_stage('Stage');
         $action = parent::doDelete($data, $form);
-        Versioned::reading_stage('Live');
+        Versioned::reading_stage($currentStage);
 
         return $action;
     }
 
     private function publish($data, $form)
     {
+        $currentStage = Versioned::current_stage();
         Versioned::reading_stage('Stage');
 
         $class = $this->record->ClassName;
@@ -98,11 +105,12 @@ class CatalogPageGridFieldDetailForm_ItemRequest extends GridFieldDetailForm_Ite
             $form->sessionMessage('Something failed, please refresh your browser.', 'bad');
         }
 
-        Versioned::set_reading_mode('Live');
+        Versioned::reading_stage($currentStage);
     }
 
     private function unpublish($data, $form)
     {
+        $currentStage = Versioned::current_stage();
         Versioned::reading_stage('Stage');
         $class = $this->record->ClassName;
         $page = $class::get()->byID($this->record->ID);
@@ -114,7 +122,7 @@ class CatalogPageGridFieldDetailForm_ItemRequest extends GridFieldDetailForm_Ite
             $form->sessionMessage('Something failed, please refresh your browser.', 'bad');
         }
 
-        Versioned::set_reading_mode('Live');
+        Versioned::reading_stage($currentStage);
     }
 
 

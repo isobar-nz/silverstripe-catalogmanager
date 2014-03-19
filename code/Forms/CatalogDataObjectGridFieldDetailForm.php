@@ -61,9 +61,10 @@ class CatalogDataObjectGridFieldDetailForm_ItemRequest extends GridFieldDetailFo
 
     public function doSave($data, $form)
     {
+        $currentStage = Versioned::current_stage();
         Versioned::reading_stage('Stage');
         $action = parent::doSave($data, $form);
-        Versioned::reading_stage('Live');
+        Versioned::reading_stage($currentStage);
 
         if ($this->record->isPublished()) {
             $this->publish($data, $form);
@@ -74,19 +75,21 @@ class CatalogDataObjectGridFieldDetailForm_ItemRequest extends GridFieldDetailFo
 
     public function doDelete($data, $form)
     {
+        $currentStage = Versioned::current_stage();
         if ($this->record->isPublished()) {
             $this->unpublish($data, $form);
         }
 
         Versioned::reading_stage('Stage');
         $action = parent::doDelete($data, $form);
-        Versioned::reading_stage('Live');
+        Versioned::reading_stage($currentStage);
 
         return $action;
     }
 
     private function publish($data, $form)
     {
+        $currentStage = Versioned::current_stage();
         Versioned::reading_stage('Stage');
 
         $class = $this->record->ClassName;
@@ -99,11 +102,12 @@ class CatalogDataObjectGridFieldDetailForm_ItemRequest extends GridFieldDetailFo
             $form->sessionMessage('Something failed, please refresh your browser.', 'bad');
         }
 
-        Versioned::set_reading_mode('Live');
+        Versioned::reading_stage($currentStage);
     }
 
     private function unpublish($data, $form)
     {
+        $currentStage = Versioned::current_stage();
         Versioned::reading_stage('Stage');
         $class = $this->record->ClassName;
         $page = $class::get()->byID($this->record->ID);
@@ -115,7 +119,7 @@ class CatalogDataObjectGridFieldDetailForm_ItemRequest extends GridFieldDetailFo
             $form->sessionMessage('Something failed, please refresh your browser.', 'bad');
         }
 
-        Versioned::set_reading_mode('Live');
+        Versioned::reading_stage($currentStage);
     }
 
 
