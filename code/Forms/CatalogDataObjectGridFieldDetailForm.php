@@ -37,6 +37,13 @@ class CatalogDataObjectGridFieldDetailForm_ItemRequest extends GridFieldDetailFo
                             ->setAttribute('data-icon', 'accept')
                     );
                 }
+
+                $actions->push(
+                    FormAction::create('doDuplicate', 'Duplicate')
+                        ->setUseButtonTag(true)
+                        ->addExtraClass('ss-ui-action-constructive')
+                        ->setAttribute('data-icon', 'accept')
+                );
             }
 
 
@@ -120,6 +127,34 @@ class CatalogDataObjectGridFieldDetailForm_ItemRequest extends GridFieldDetailFo
         }
 
         Versioned::reading_stage($currentStage);
+    }
+
+    public function doDuplicate($data, $form)
+    {
+        $this->duplicate($data, $form);
+        return $this->edit(Controller::curr()->getRequest());
+    }
+
+    private function duplicate($data, $form)
+    {
+        Versioned::reading_stage('Stage');
+
+        $class = $this->record->ClassName;
+        $object = $class::get()->byID($this->record->ID);
+        $newObject = false;
+        if ($object) {
+            $object->Title = "Copy of " . $object->Title;
+            $newObject = $object->duplicate();
+            $form->sessionMessage($this->record->getTitle() . ' has been duplicated.', 'good');
+        } else {
+            $form->sessionMessage('Something failed, please refresh your browser.', 'bad');
+        }
+
+        Versioned::set_reading_mode('Live');
+
+        if ($newObject) {
+            Controller::curr()->redirect(Controller::curr()->Link() . '/EditForm/field/' . $this->record->ClassName .'/item/' . $newPage->ID);
+        }
     }
 
 
