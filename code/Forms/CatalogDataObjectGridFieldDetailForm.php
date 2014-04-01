@@ -150,7 +150,7 @@ class CatalogDataObjectGridFieldDetailForm_ItemRequest extends GridFieldDetailFo
             $form->sessionMessage('Something failed, please refresh your browser.', 'bad');
         }
 
-        Versioned::set_reading_mode('Live');
+        Versioned::reading_stage('Live');
 
         if ($newObject) {
             Controller::curr()->redirect(Controller::curr()->Link() . '/EditForm/field/' . $this->record->ClassName .'/item/' . $newPage->ID);
