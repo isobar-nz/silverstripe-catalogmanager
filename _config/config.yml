@@ -1,0 +1,8 @@
+---
+Name: catalog-manager
+After: 'framework/*','cms/*'
+---
+
+Page:
+  extensions:
+    - CategoryPageHierarchyExtension
