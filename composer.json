@@ -11,7 +11,7 @@
 		}
 	],
 	"require": {
-		"undefinedoffset/sortablegridfield": "dev-master"
+		"undefinedoffset/sortablegridfield": "0.3.*"
 	},
 	"minimum-stability": "dev"
 }
