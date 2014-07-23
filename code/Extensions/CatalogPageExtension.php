@@ -6,10 +6,10 @@ class CatalogPageExtension extends DataExtension
     private static $parentClass;
 
     private static $summary_fields = array(
-        'getEnabledStatus' => 'Enabled'
+        'Enabled' => 'Enabled'
     );
 
-    public function getEnabledStatus()
+    public function Enabled()
     {
         return $this->owner->isPublished() ? 'Yes' : 'No';
     }
