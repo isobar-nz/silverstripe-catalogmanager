@@ -20,6 +20,7 @@ class CatalogPageAdmin extends ModelAdmin
                 $fieldConfig = GridFieldConfig_RecordEditor::create($this->stat('page_length'))
                     ->removeComponentsByType('GridFieldFilterHeader')
                     ->removeComponentsByType('GridFieldDeleteAction')
+					->addComponent(new GridfieldPagePublishAction())
             );
 
             $form = CMSForm::create(
