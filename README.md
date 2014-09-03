@@ -19,7 +19,7 @@ Add the following to a configuration yml file:
 CatalogPage:
   extensions:
     - CatalogPageExtension
-  parent_class: 'CatalogParentPage'
+  parentClass: 'CatalogParentPage'
   can_duplicate: true
 ```
 
