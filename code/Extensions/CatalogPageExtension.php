@@ -4,7 +4,7 @@ class CatalogPageExtension extends DataExtension
 {
 
     private static $parentClass;
-    private static $can_duplicate;
+    private static $can_duplicate = true;
 
     private static $summary_fields = array(
         'Enabled' => 'Enabled'
