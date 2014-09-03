@@ -19,7 +19,8 @@ Add the following to a configuration yml file:
 CatalogPage:
   extensions:
     - CatalogPageExtension
-  parentClass: 'CatalogParentPage'
+  parent_class: 'CatalogParentPage'
+  can_duplicate: true
 ```
 
 Where `CatalogPage` is the page type you wish to administer (e.g. BlogEntry) and `CatalogParentPage` is where the pages

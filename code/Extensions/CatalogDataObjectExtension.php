@@ -3,6 +3,7 @@
 class CatalogDataObjectExtension extends DataExtension
 {
     private static $parentClass;
+    private static $can_duplicate;
 
     private static $db = array(
         'Sort' => 'Int'
@@ -37,11 +38,11 @@ class CatalogDataObjectExtension extends DataExtension
                         $fields->push(DropdownField::create('ParentID', 'Parent Page', $pages->map('ID', 'Title'), $parentID));
                     }
                 } else {
-                    throw new Exception('You must create a parent page of class ' . get_class($this->owner->stat('parentClass')));
+                    throw new Exception('You must create a parent page of class ' . $parentClass);
                 }
 
             } else {
-                throw new Exception('Parent class ' . $this->owner->stat('parentClass') . ' does not exist.');
+                throw new Exception('Parent class ' . $parentClass . ' does not exist.');
             }
         }
     }

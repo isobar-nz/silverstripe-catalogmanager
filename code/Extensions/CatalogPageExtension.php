@@ -4,6 +4,7 @@ class CatalogPageExtension extends DataExtension
 {
 
     private static $parentClass;
+    private static $can_duplicate;
 
     private static $summary_fields = array(
         'Enabled' => 'Enabled'
@@ -31,11 +32,11 @@ class CatalogPageExtension extends DataExtension
                         $fields->addFieldToTab('Root.Main', DropdownField::create('ParentID', 'Parent Page', $pages->map('ID', 'Title'), $parentID));
                     }
                 } else {
-                    throw new Exception('You must create a parent page of class ' . get_class($this->owner->stat('parentClass')));
+                    throw new Exception('You must create a parent page of class ' . $parentClass);
                 }
 
             } else {
-                throw new Exception('Parent class ' . $this->owner->stat('parentClass') . ' does not exist.');
+                throw new Exception('Parent class ' . $parentClass . ' does not exist.');
             }
         }
     }
