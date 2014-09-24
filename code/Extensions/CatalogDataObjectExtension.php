@@ -8,10 +8,6 @@ class CatalogDataObjectExtension extends DataExtension
         'Sort' => 'Int'
     );
 
-    private static $summary_fields = array(
-        'getEnabledStatus' => 'Enabled'
-    );
-
     public function getEnabledStatus()
     {
         return $this->owner->isPublished() ? 'Yes' : 'No';
@@ -45,6 +41,14 @@ class CatalogDataObjectExtension extends DataExtension
             }
         }
     }
+
+	/**
+	 * @inheritdoc
+	 * @param array $fields
+	 */
+	public function updateSummaryFields(&$fields){
+		$fields['getEnabledStatus'] = 'Enabled';
+	}
 
     /**
      * @return bool
