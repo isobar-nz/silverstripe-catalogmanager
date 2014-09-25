@@ -38,12 +38,14 @@ class CatalogDataObjectGridFieldDetailForm_ItemRequest extends GridFieldDetailFo
                     );
                 }
 
-                $actions->push(
-                    FormAction::create('doDuplicate', 'Duplicate')
-                        ->setUseButtonTag(true)
-                        ->addExtraClass('ss-ui-action-constructive')
-                        ->setAttribute('data-icon', 'accept')
-                );
+                if ($this->record->canCreate() && $this->record->stat('can_duplicate')) {
+                    $actions->push(
+                        FormAction::create('doDuplicate', 'Duplicate')
+                            ->setUseButtonTag(true)
+                            ->addExtraClass('ss-ui-action-constructive')
+                            ->setAttribute('data-icon', 'accept')
+                    );
+                }
             }
 
 

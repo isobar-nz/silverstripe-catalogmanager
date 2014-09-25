@@ -4,6 +4,7 @@ class CatalogPageExtension extends DataExtension
 {
 
     private static $parentClass;
+    private static $can_duplicate = true;
 
     public function getEnabledStatus()
     {

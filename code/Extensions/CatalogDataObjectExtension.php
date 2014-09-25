@@ -3,6 +3,7 @@
 class CatalogDataObjectExtension extends DataExtension
 {
     private static $parentClass;
+    private static $can_duplicate = true;
 
     private static $db = array(
         'Sort' => 'Int'
