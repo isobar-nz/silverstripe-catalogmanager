@@ -26,11 +26,11 @@ Where `CatalogPage` is the page type you wish to administer (e.g. BlogEntry) and
 should be stored in the SiteTree (e.g. BlogHolder). You may have multiple instances of the parent, the administration
 will provide users with a drop down to choose which page should be the parent.
 
-Then simply extend CatalogPageAdmin instead of ModelAdmin.
+Then simply extend `CatalogPageAdmin` instead of `ModelAdmin`.
 
 ### DataObjects
 
-You can also manage DataObjects through the `CatalogDataObjectExtension` (documentation coming soon)
+You can also manage DataObjects through the `CatalogDataObjectExtension`
 
 ### Translations
 
@@ -41,6 +41,18 @@ choosing languages.
 CatalogPageAdmin:
   extensions:
     - TranslatableCatalogExtension
+```
+
+### Options
+
+You can disable the ability to duplicate pages through the `can_duplicate` configuration setting per object.
+
+```yml
+CatalogPage:
+  extensions:
+    - CatalogPageExtension
+  parentClass: 'CatalogParentPage'
+  can_duplicate: false
 ```
 
 ## License
