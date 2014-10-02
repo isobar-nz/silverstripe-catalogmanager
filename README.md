@@ -55,6 +55,9 @@ CatalogPage:
   can_duplicate: false
 ```
 
+You can add drag and drop sorting using GridFieldSortableRows when you add the `sort_column` setting to your configuration.
+Uses column `Sort` by default which is default in SiteTree and is added by CatalogDataObjectExtension.
+
 ## License
 
 SilverStripe Single Page Administration is released under the MIT license
