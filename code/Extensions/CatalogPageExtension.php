@@ -54,11 +54,14 @@ class CatalogPageExtension extends DataExtension
 	/**
 	 * Gets the fieldname for the sort column. As we're on a subclass of SiteTree we assume 'Sort' as default.
 	 * Can be overwritten using $sort_column param on extended class.
+	 * Set $sort_column config to false to disable sorting in the gridfield
 	 *
 	 * @return string
 	 */
 	public function getSortFieldname(){
-		return $this->owner->config()->get('sort_column') ?: 'Sort';
+		return ($this->owner->config()->get('sort_column') === false)
+			? false
+			: ($this->owner->config()->get('sort_column') ?: 'Sort');
 	}
 
 }
