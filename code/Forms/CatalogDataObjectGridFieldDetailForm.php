@@ -38,7 +38,7 @@ class CatalogDataObjectGridFieldDetailForm_ItemRequest extends GridFieldDetailFo
                     );
                 }
 
-                if ($this->record->canCreate() && $this->record->stat('can_duplicate')) {
+                if ($this->record->canCreate() && $this->record->stat('can_duplicate') == true) {
                     $actions->push(
                         FormAction::create('doDuplicate', 'Duplicate')
                             ->setUseButtonTag(true)
@@ -52,6 +52,8 @@ class CatalogDataObjectGridFieldDetailForm_ItemRequest extends GridFieldDetailFo
             $form->setActions($actions);
 
         }
+
+        $this->extend('updateItemEditForm', $form);
 
         return $form;
     }
