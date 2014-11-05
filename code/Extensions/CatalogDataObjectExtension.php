@@ -5,6 +5,12 @@ class CatalogDataObjectExtension extends DataExtension
     private static $parentClass;
     private static $can_duplicate = true;
 
+	/**
+	 * Name of the sorting column. SiteTree has a col named "Sort", we use this as default
+	 * @var string
+	 */
+	private  static $sort_column = 'Sort';
+
     private static $db = array(
         'Sort' => 'Int'
     );
@@ -138,4 +144,13 @@ class CatalogDataObjectExtension extends DataExtension
 
         return true;
     }
+
+	/**
+	 * gets the fieldname for the sort column. Uses in owner's config for $sort_column
+	 *
+	 * @return string
+	 */
+	public function getSortFieldname(){
+		return $this->owner->config()->get('sort_column');
+	}
 }

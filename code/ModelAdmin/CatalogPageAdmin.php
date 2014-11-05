@@ -46,6 +46,11 @@ class CatalogPageAdmin extends ModelAdmin
             $form->setFormAction($editFormAction);
             $form->setAttribute('data-pjax-fragment', 'CurrentForm');
 
+			/** add sorting if we have a field for... */
+			if (class_exists('GridFieldSortableRows') && $sortField = $model->getSortFieldname()) {
+				$fieldConfig->addComponent(new GridFieldSortableRows($sortField));
+			}
+
         } else if (method_exists($model, 'getAdminListField')) {
 
             $form = CMSForm::create(

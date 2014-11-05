@@ -6,6 +6,12 @@ class CatalogPageExtension extends DataExtension
     private static $parentClass;
     private static $can_duplicate = true;
 
+	/**
+	 * Name of the sorting column. SiteTree has a col named "Sort", we use this as default
+	 * @var string
+	 */
+	private  static $sort_column = 'Sort';
+
     public function getEnabledStatus()
     {
         return $this->owner->isPublished() ? 'Yes' : 'No';
@@ -43,6 +49,19 @@ class CatalogPageExtension extends DataExtension
 	 */
 	public function updateSummaryFields(&$fields){
 		$fields['getEnabledStatus'] = 'Enabled';
+	}
+
+	/**
+	 * Gets the fieldname for the sort column. As we're on a subclass of SiteTree we assume 'Sort' as default.
+	 * Can be overwritten using $sort_column param on extended class.
+	 * Set $sort_column config to false to disable sorting in the gridfield
+	 *
+	 * @return string
+	 */
+	public function getSortFieldname(){
+		return ($this->owner->config()->get('sort_column') === false)
+			? false
+			: ($this->owner->config()->get('sort_column') ?: 'Sort');
 	}
 
 }
