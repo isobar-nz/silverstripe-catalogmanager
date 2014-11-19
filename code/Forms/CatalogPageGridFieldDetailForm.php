@@ -17,8 +17,10 @@ class CatalogPageGridFieldDetailForm_ItemRequest extends GridFieldDetailForm_Ite
         if (!$this->record->isPublished()) {
             Versioned::reading_stage('Stage');
         }
-        // set a parent id for the record, even if it will change
-        $this->record->ParentID = $this->record->getCatalogParents()->first()->ID;
+        if ($this->record->ParentID) {
+            // set a parent id for the record, even if it will change
+            $this->record->ParentID = $this->record->getCatalogParents()->first()->ID;
+        }
 
         $form = parent::ItemEditForm();
 
