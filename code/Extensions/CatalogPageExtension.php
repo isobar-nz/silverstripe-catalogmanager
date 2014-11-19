@@ -20,7 +20,7 @@ class CatalogPageExtension extends DataExtension
         $parentClass = $this->owner->stat('parentClass');
 
         if (class_exists($parentClass)) {
-            if ($pages = $parentClass::get()->filter(array('ClassName' => $parentClass))) {
+            if ($pages = $this->getCatalogParents()) {
 
                 if ($pages->exists()) {
                     if ($pages->count() == 1) {
@@ -39,6 +39,13 @@ class CatalogPageExtension extends DataExtension
                 throw new Exception('Parent class ' . $parentClass . ' does not exist.');
             }
         }
+    }
+
+    public function getCatalogParents()
+    {
+        $parentClass = $this->owner->stat('parentClass');
+        $pages = $parentClass::get()->filter(array('ClassName' => $parentClass));
+        return $pages;
     }
 
 }
