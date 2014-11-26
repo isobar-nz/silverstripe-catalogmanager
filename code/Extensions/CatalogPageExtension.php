@@ -22,7 +22,7 @@ class CatalogPageExtension extends DataExtension
         if (class_exists($parentClass)) {
             if ($pages = $this->getCatalogParents()) {
 
-                if ($pages->exists()) {
+                if ($pages && $pages->exists()) {
                     if ($pages->count() == 1) {
 
                         $fields->addFieldToTab('Root.Main', HiddenField::create('ParentID', 'ParentID', $pages->first()->ID));
@@ -44,8 +44,11 @@ class CatalogPageExtension extends DataExtension
     public function getCatalogParents()
     {
         $parentClass = $this->owner->stat('parentClass');
-        $pages = $parentClass::get()->filter(array('ClassName' => $parentClass));
-        return $pages;
+        if ($parentClass) {
+            $pages = $parentClass::get()->filter(array('ClassName' => $parentClass));
+            return $pages;
+        }
+        return false;
     }
 
 }
