@@ -25,25 +25,23 @@ class CatalogDataObjectExtension extends DataExtension
 
         $parentClass = $this->owner->stat('parentClass');
 
-        if (class_exists($parentClass)) {
-            if ($pages = $parentClass::get()) {
+        if ($pages = $parentClass::get()->filter(array('ClassName' => array_values($parentClass)))) {
 
-                if ($pages->exists()) {
-                    if ($pages->count() == 1) {
+            if ($pages->exists()) {
+                if ($pages->count() == 1) {
 
-                        $fields->push(HiddenField::create('ParentID', 'ParentID', $pages->first()->ID));
+                    $fields->push(HiddenField::create('ParentID', 'ParentID', $pages->first()->ID));
 
-                    } else {
-                        $parentID = $this->owner->ParentID ? : $pages->first()->ID;
-                        $fields->push(DropdownField::create('ParentID', 'Parent Page', $pages->map('ID', 'Title'), $parentID));
-                    }
                 } else {
-                    throw new Exception('You must create a parent page of class ' . $parentClass);
+                    $parentID = $this->owner->ParentID ? : $pages->first()->ID;
+                    $fields->push(DropdownField::create('ParentID', 'Parent Page', $pages->map('ID', 'Title'), $parentID));
                 }
-
             } else {
-                throw new Exception('Parent class ' . $parentClass . ' does not exist.');
+                throw new Exception('You must create a parent page of class ' . $parentClass);
             }
+
+        } else {
+            throw new Exception('Parent class ' . $parentClass . ' does not exist.');
         }
     }
 
