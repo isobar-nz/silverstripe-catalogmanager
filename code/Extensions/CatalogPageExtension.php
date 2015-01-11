@@ -19,33 +19,32 @@ class CatalogPageExtension extends DataExtension
     {
         $parentClass = $this->owner->stat('parentClass');
 
-        if (class_exists($parentClass)) {
-            if ($pages = $this->getCatalogParents()) {
+        if ($pages = $this->getCatalogParents()) {
 
-                if ($pages && $pages->exists()) {
-                    if ($pages->count() == 1) {
+            if ($pages && $pages->exists()) {
+                if ($pages->count() == 1) {
 
-                        $fields->addFieldToTab('Root.Main', HiddenField::create('ParentID', 'ParentID', $pages->first()->ID));
+                    $fields->addFieldToTab('Root.Main', HiddenField::create('ParentID', 'ParentID', $pages->first()->ID));
 
-                    } else {
-                        $parentID = $this->owner->ParentID ? : $pages->first()->ID;
-                        $fields->addFieldToTab('Root.Main', DropdownField::create('ParentID', 'Parent Page', $pages->map('ID', 'Title'), $parentID));
-                    }
                 } else {
-                    throw new Exception('You must create a parent page of class ' . $parentClass);
+                    $parentID = $this->owner->ParentID ? : $pages->first()->ID;
+                    $fields->addFieldToTab('Root.Main', DropdownField::create('ParentID', 'Parent Page', $pages->map('ID', 'Title'), $parentID));
                 }
-
             } else {
-                throw new Exception('Parent class ' . $parentClass . ' does not exist.');
+                throw new Exception('You must create a parent page of class ' . $parentClass);
             }
+
+        } else {
+            throw new Exception('Parent class ' . implode(',', $parentClass) . ' does not exist.');
         }
+        #}
     }
 
     public function getCatalogParents()
     {
         $parentClass = $this->owner->stat('parentClass');
-        if ($parentClass) {
-            $pages = $parentClass::get()->filter(array('ClassName' => $parentClass));
+        if (count($parentClass)) {
+            $pages = SiteTree::get()->filter(array('ClassName' => array_values($parentClass)));
             return $pages;
         }
         return false;
