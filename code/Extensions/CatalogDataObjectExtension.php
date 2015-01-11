@@ -25,7 +25,7 @@ class CatalogDataObjectExtension extends DataExtension
 
         $parentClass = $this->owner->stat('parentClass');
 
-        if ($pages = $parentClass::get()->filter(array('ClassName' => array_values($parentClass)))) {
+        if ($pages = DataObject::get()->filter(array('ClassName' => array_values($parentClass)))) {
 
             if ($pages->exists()) {
                 if ($pages->count() == 1) {

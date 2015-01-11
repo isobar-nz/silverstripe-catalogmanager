@@ -19,12 +19,13 @@ Add the following to a configuration yml file:
 CatalogPage:
   extensions:
     - CatalogPageExtension
-  parentClass: 'CatalogParentPage'
+  parentClass:
+    - 'CatalogParentPage'
+    - 'CatalogParentPage2'
   can_duplicate: true
 ```
 
-Where `CatalogPage` is the page type you wish to administer (e.g. BlogEntry) and `CatalogParentPage` is where the pages
-should be stored in the SiteTree (e.g. BlogHolder). You may have multiple instances of the parent, the administration
+Where `CatalogPage` is the page type you wish to administer (e.g. BlogEntry), `CatalogParentPage` and `CatalogParentPage2` are an array of parent classes where the pages can be stored in the SiteTree (e.g. BlogHolder). You may have multiple instances of the parent, the administration
 will provide users with a drop down to choose which page should be the parent.
 
 Then simply extend CatalogPageAdmin instead of ModelAdmin.
