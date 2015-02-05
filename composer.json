@@ -1,16 +1,26 @@
 {
-	"name": "littlegiant/silverstripe-catalogmanager",
-	"type": "silverstripe-module",
-	"description": "Catalog Manager provides extension for ModelAdmin editing of SiteTree instances",
-	"license": "MIT",
-	"authors": [
-		{
-			"name": "Stevie Mayhew",
-			"email": "stevie.mayhew@littlegiant.co.nz.co.nz",
-			"role": "Developer"
-		}
-	],
-	"require": {
-		"undefinedoffset/sortablegridfield": "~0.4.0"
-	}
+    "name": "littlegiant/silverstripe-catalogmanager",
+    "type": "silverstripe-module",
+    "description": "Catalog Manager provides extension for ModelAdmin editing of SiteTree instances",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Stevie Mayhew",
+            "email": "stevie.mayhew@littlegiant.co.nz",
+            "role": "Developer"
+        },
+        {
+            "name": "Oliver Shaw",
+            "email": "oliver.shaw@littlegiant.co.nz",
+            "role": "Developer"
+        },
+        {
+            "name": "James Fallwell",
+            "email": "james.fallwell@littlegiant.co.nz",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "undefinedoffset/sortablegridfield": "~0.4.0"
+    }
 }
