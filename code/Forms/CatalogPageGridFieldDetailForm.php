@@ -1,18 +1,30 @@
 <?php
 
+/**
+ * Class CatalogPageGridFieldDetailForm
+ */
 class CatalogPageGridFieldDetailForm extends GridFieldDetailForm
 {
 
 }
 
+/**
+ * Class CatalogPageGridFieldDetailForm_ItemRequest
+ */
 class CatalogPageGridFieldDetailForm_ItemRequest extends GridFieldDetailForm_ItemRequest
 {
 
+    /**
+     * @var array
+     */
     private static $allowed_actions = array(
         'ItemEditForm'
     );
 
-    function ItemEditForm()
+    /**
+     * @return Form
+     */
+    public function ItemEditForm()
     {
         if (!$this->record->isPublished()) {
             Versioned::reading_stage('Stage');
@@ -35,13 +47,13 @@ class CatalogPageGridFieldDetailForm_ItemRequest extends GridFieldDetailForm_Ite
             if ($this->record->ID) {
                 if ($this->record->isPublished()) {
                     $actions->push(
-                        FormAction::create('doDisable', 'Disable')
+                        FormAction::create('doDisable', _t('CatalogManager.DISABLE', 'Disable'))
                             ->setUseButtonTag(true)
                             ->addExtraClass('ss-ui-action-destructive')
                     );
                 } else {
                     $actions->push(
-                        FormAction::create('doEnable', 'Enable')
+                        FormAction::create('doEnable', _t('CatalogManager.ENABLE', 'Enable'))
                             ->setUseButtonTag(true)
                             ->addExtraClass('ss-ui-action-constructive')
                             ->setAttribute('data-icon', 'accept')
@@ -51,7 +63,7 @@ class CatalogPageGridFieldDetailForm_ItemRequest extends GridFieldDetailForm_Ite
 
             if ($this->record->canCreate() && $this->record->stat('can_duplicate') == true) {
                 $actions->push(
-                    FormAction::create('doDuplicate', 'Duplicate')
+                    FormAction::create('doDuplicate', _t('CatalogManager.DUPLICATE', 'Duplicate'))
                         ->setUseButtonTag(true)
                         ->addExtraClass('ss-ui-action-constructive')
                         ->setAttribute('data-icon', 'accept')
@@ -67,18 +79,33 @@ class CatalogPageGridFieldDetailForm_ItemRequest extends GridFieldDetailForm_Ite
         return $form;
     }
 
+    /**
+     * @param $data
+     * @param $form
+     * @return HTMLText|ViewableData_Customised
+     */
     public function doEnable($data, $form)
     {
         $this->publish($data, $form);
         return $this->edit(Controller::curr()->getRequest());
     }
 
+    /**
+     * @param $data
+     * @param $form
+     * @return HTMLText|ViewableData_Customised
+     */
     public function doDisable($data, $form)
     {
         $this->unpublish($data, $form);
         return $this->edit(Controller::curr()->getRequest());
     }
 
+    /**
+     * @param $data
+     * @param $form
+     * @return HTMLText|SS_HTTPResponse|ViewableData_Customised|void
+     */
     public function doSave($data, $form)
     {
         $currentStage = Versioned::current_stage();
@@ -93,6 +120,11 @@ class CatalogPageGridFieldDetailForm_ItemRequest extends GridFieldDetailForm_Ite
         return $action;
     }
 
+    /**
+     * @param $data
+     * @param $form
+     * @return bool|SS_HTTPResponse
+     */
     public function doDelete($data, $form)
     {
         if ($this->record->isPublished()) {
@@ -107,6 +139,10 @@ class CatalogPageGridFieldDetailForm_ItemRequest extends GridFieldDetailForm_Ite
         return $action;
     }
 
+    /**
+     * @param $data
+     * @param $form
+     */
     private function publish($data, $form)
     {
         $currentStage = Versioned::current_stage();
@@ -117,14 +153,35 @@ class CatalogPageGridFieldDetailForm_ItemRequest extends GridFieldDetailForm_Ite
 
         if ($page) {
             $page->doPublish();
-            $form->sessionMessage($this->record->getTitle() . ' has been enabled.', 'good');
+            $form->sessionMessage(
+                _t(
+                    'CatalogManager.SUCCESS',
+                    '{title} has been {type}.',
+                    "",
+                    array(
+                        'title' => $this->record->getTitle(),
+                        'type' => 'enabled'
+                    )
+                ),
+                'good'
+            );
         } else {
-            $form->sessionMessage('Something failed, please refresh your browser.', 'bad');
+            $form->sessionMessage(
+                _t(
+                    'CatalogManager.ERROR',
+                    'Something failed, please refresh your browser.'
+                ),
+                'bad'
+            );
         }
 
         Versioned::reading_stage($currentStage);
     }
 
+    /**
+     * @param $data
+     * @param $form
+     */
     private function unpublish($data, $form)
     {
         $currentStage = Versioned::current_stage();
@@ -134,20 +191,46 @@ class CatalogPageGridFieldDetailForm_ItemRequest extends GridFieldDetailForm_Ite
 
         if ($page) {
             $page->doUnpublish();
-            $form->sessionMessage($this->record->getTitle() . ' has been disabled.', 'good');
+            $form->sessionMessage(
+                _t(
+                    'CatalogManager.SUCCESS',
+                    '{title} has been {type}.',
+                    "",
+                    array(
+                        'title' => $this->record->getTitle(),
+                        'type' => 'disabled'
+                    )
+                ),
+                'good'
+            );
         } else {
-            $form->sessionMessage('Something failed, please refresh your browser.', 'bad');
+            $form->sessionMessage(
+                _t(
+                    'CatalogManager.ERROR',
+                    'Something failed, please refresh your browser.'
+                ),
+                'bad'
+            );
         }
 
         Versioned::reading_stage($currentStage);
     }
 
+    /**
+     * @param $data
+     * @param $form
+     * @return HTMLText|ViewableData_Customised
+     */
     public function doDuplicate($data, $form)
     {
         $this->duplicate($data, $form);
         return $this->edit(Controller::curr()->getRequest());
     }
 
+    /**
+     * @param $data
+     * @param $form
+     */
     private function duplicate($data, $form)
     {
         Versioned::reading_stage('Stage');
@@ -158,9 +241,26 @@ class CatalogPageGridFieldDetailForm_ItemRequest extends GridFieldDetailForm_Ite
         if ($page) {
             $page->Title = "Copy of " . $page->Title;
             $newPage = $page->duplicate();
-            $form->sessionMessage($this->record->getTitle() . ' has been duplicated.', 'good');
+            $form->sessionMessage(
+                _t(
+                    'CatalogManager.SUCCESS',
+                    '{title} has been {type}.',
+                    "",
+                    array(
+                        'title' => $this->record->getTitle(),
+                        'type' => 'duplicated'
+                    )
+                ),
+                'good'
+            );
         } else {
-            $form->sessionMessage('Something failed, please refresh your browser.', 'bad');
+            $form->sessionMessage(
+                _t(
+                    'CatalogManager.ERROR',
+                    'Something failed, please refresh your browser.'
+                ),
+                'bad'
+            );
         }
 
         Versioned::reading_stage('Live');

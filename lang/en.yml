@@ -1,0 +1,13 @@
+en:
+  CatalogManager:
+    PARENTPAGE: 'Parent Page'
+    ENABLE: 'Enable'
+    DISABLE: 'Disable'
+    DUPLICATE: 'Duplicate'
+    SUCCESS: '{title} has been {type}.'
+    ERROR: 'Something failed, please refresh your browser.'
+    BUTTONUNPUBLISH: 'Unpublish'
+    BUTTONUNPUBLISHDESC: 'Unpublish'
+    BUTTONSAVEPUBLISH: 'Save & Publish'
+    BUTTONSAVEPUBLISHDESC: 'Save & Publish'
+    PUBLISHPERMISSIONFAILURE: 'No permission to publish or unpublish item'

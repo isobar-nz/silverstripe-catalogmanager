@@ -1,20 +1,42 @@
 <?php
 
+/**
+ * Class CatalogDataObjectExtension
+ */
 class CatalogDataObjectExtension extends DataExtension
 {
+    /**
+     * @config
+     * @var array
+     */
     private static $parentClass;
+    /**
+     * @config
+     * @var bool
+     */
     private static $can_duplicate = true;
-
     /**
      * Name of the sorting column. SiteTree has a col named "Sort", we use this as default
+     * @config
      * @var string
      */
-    private static $sort_column = 'Sort';
-
+    private static $sort_column = false;
+    /**
+     * @config
+     * @var bool
+     */
+    private static $automatic_live_sort = true;
+    /**
+     * @config
+     * @var array
+     */
     private static $db = array(
         'Sort' => 'Int'
     );
-
+    /**
+     * @config
+     * @var array
+     */
     private static $summary_fields = array(
         'isPublishedNice' => 'Enabled'
     );
@@ -41,14 +63,14 @@ class CatalogDataObjectExtension extends DataExtension
 
                 } else {
                     $parentID = $this->owner->ParentID ? : $pages->first()->ID;
-                    $fields->push(DropdownField::create('ParentID', 'Parent Page', $pages->map('ID', 'Title'), $parentID));
+                    $fields->push(DropdownField::create('ParentID', _t('CatalogManager.PARENTPAGE', 'Parent Page'), $pages->map('ID', 'Title'), $parentID));
                 }
             } else {
-                throw new Exception('You must create a parent page of class ' . $parentClass);
+                throw new Exception('You must create a parent page of class ' . implode(',', $parentClass));
             }
 
         } else {
-            throw new Exception('Parent class ' . $parentClass . ' does not exist.');
+            throw new Exception('Parent class ' . implode(',', $parentClass) . ' does not exist.');
         }
     }
 

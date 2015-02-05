@@ -1,17 +1,34 @@
 <?php
 
+/**
+ * Class CatalogPageExtension
+ */
 class CatalogPageExtension extends DataExtension
 {
-
+    /**
+     * @config
+     * @var array
+     */
     private static $parentClass;
+
+    /**
+     * @config
+     * @var bool
+     */
     private static $can_duplicate = true;
 
     /**
      * Name of the sorting column. SiteTree has a col named "Sort", we use this as default
+     * @config
      * @var string
      */
     private static $sort_column = 'Sort';
 
+    /**
+     * @config
+     * @var bool
+     */
+    private static $automatic_live_sort = true;
 
     /**
      * @inheritdoc
@@ -41,25 +58,23 @@ class CatalogPageExtension extends DataExtension
     {
         $parentClass = $this->owner->stat('parentClass');
 
-        if (class_exists($parentClass)) {
-            if ($pages = $parentClass::get()->filter(array('ClassName' => $parentClass))) {
+        if ($pages = $this->getCatalogParents()) {
 
-                if ($pages->exists()) {
-                    if ($pages->count() == 1) {
+            if ($pages && $pages->exists()) {
+                if ($pages->count() == 1) {
 
-                        $fields->addFieldToTab('Root.Main', HiddenField::create('ParentID', 'ParentID', $pages->first()->ID));
+                    $fields->addFieldToTab('Root.Main', HiddenField::create('ParentID', 'ParentID', $pages->first()->ID));
 
-                    } else {
-                        $parentID = $this->owner->ParentID ? : $pages->first()->ID;
-                        $fields->addFieldToTab('Root.Main', DropdownField::create('ParentID', 'Parent Page', $pages->map('ID', 'Title'), $parentID));
-                    }
                 } else {
-                    throw new Exception('You must create a parent page of class ' . get_class($this->owner->stat('parentClass')));
+                    $parentID = $this->owner->ParentID ? : $pages->first()->ID;
+                    $fields->addFieldToTab('Root.Main', DropdownField::create('ParentID', _t('CatalogManager.PARENTPAGE', 'Parent Page'), $pages->map('ID', 'Title'), $parentID));
                 }
-
             } else {
-                throw new Exception('Parent class ' . $this->owner->stat('parentClass') . ' does not exist.');
+                throw new Exception('You must create a parent page of class ' . implode(',', $parentClass));
             }
+
+        } else {
+            throw new Exception('Parent class ' . implode(',', $parentClass) . ' does not exist.');
         }
     }
 
@@ -80,7 +95,7 @@ class CatalogPageExtension extends DataExtension
     /**
      * Gets the parents of this page
      *
-     * @return bool
+     * @return bool|DataList
      */
     public function getCatalogParents()
     {

@@ -77,8 +77,8 @@ class GridfieldPagePublishAction implements GridField_ColumnProvider, GridField_
                 ->setAttribute('data-icon', 'plug-disconnect-prohibition')
                 ->setDescription(
                     _t(
-                        'CatalogManager.BUTTONUNPUBLISHDESC',
-                        'Publish'
+                        'CatalogManager.BUTTONSAVEPUBLISHDESC',
+                        'Save & Publish'
                     )
                 );
         }
@@ -106,7 +106,7 @@ class GridfieldPagePublishAction implements GridField_ColumnProvider, GridField_
             if (!$item->canEdit()) {
                 throw new ValidationException(
                     _t(
-                        'CatalogManager.PublishPermissionFailure',
+                        'CatalogManager.PUBLISHPERMISSIONFAILURE',
                         'No permission to publish or unpublish item'
                     )
                 );

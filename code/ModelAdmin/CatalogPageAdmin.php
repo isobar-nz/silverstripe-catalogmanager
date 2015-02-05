@@ -1,9 +1,19 @@
 <?php
 
+/**
+ * Class CatalogPageAdmin
+ */
 class CatalogPageAdmin extends ModelAdmin
 {
+    /**
+     * @config
+     * @var string
+     */
     private static $menu_icon = 'silverstripe-catalogmanager/images/catalog.png';
 
+    /**
+     * @inheritdoc
+     */
     public function getEditForm($id = null, $fields = null)
     {
         $model = singleton($this->modelClass);
@@ -49,6 +59,7 @@ class CatalogPageAdmin extends ModelAdmin
 
             /** add sorting if we have a field for... */
             if (class_exists('GridFieldSortableRows') && $sortField = $model->getSortFieldname()) {
+                error_log($sortField);
                 $fieldConfig->addComponent(new GridFieldSortableRows($sortField));
             }
 
@@ -75,6 +86,21 @@ class CatalogPageAdmin extends ModelAdmin
 
         $this->extend('updateEditForm', $form);
         return $form;
+    }
+
+    /**
+     * Hook to update sort column on live versions of items after a sort has occured.
+     * @param $pages
+     */
+    public function onAfterGridFieldRowSort($pages)
+    {
+        $model = singleton($this->modelClass);
+        if ($model::config()->get('automatic_live_sort') == true) {
+            foreach ($pages as $page) {
+                DB::query("UPDATE " . $this->modelClass . "_Live SET CustomSort=" . $page->{$model->getSortFieldname()} . " WHERE ID=" . $page->ID);
+            }
+        }
+
     }
 
 

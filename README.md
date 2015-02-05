@@ -72,7 +72,37 @@ CatalogPage:
 You can add drag and drop sorting using GridFieldSortableRows when you add the `sort_column` setting to your configuration.
 Uses column `Sort` by default which is default in SiteTree and is added by CatalogDataObjectExtension.
 
+```yml
+CatalogPage:
+  extensions:
+    - CatalogPageExtension
+  parentClass:
+    - 'CatalogParentPage'
+  sort_column: 'CustomSort'
+```
+
 If you want to disable drag and drop sorting just set `sort_column` to false
+
+```yml
+CatalogPage:
+  extensions:
+    - CatalogPageExtension
+  parentClass:
+    - 'CatalogParentPage'
+  sort_column: false
+```
+
+Sort columns automatically update the sort column of both the staged and live versions of the object. To disable this,
+you can set the configuration option `automatic_live_sort` to false through your config.
+
+```yml
+CatalogPage:
+  extensions:
+    - CatalogPageExtension
+  parentClass:
+    - 'CatalogParentPage'
+  automatic_live_sort: false
+```
 
 ## License
 
