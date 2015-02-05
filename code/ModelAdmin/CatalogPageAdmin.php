@@ -20,6 +20,7 @@ class CatalogPageAdmin extends ModelAdmin
                 $fieldConfig = GridFieldConfig_RecordEditor::create($this->stat('page_length'))
                     ->removeComponentsByType('GridFieldFilterHeader')
                     ->removeComponentsByType('GridFieldDeleteAction')
+                    ->addComponent(new GridfieldPagePublishAction())
             );
 
             $form = CMSForm::create(
@@ -30,7 +31,7 @@ class CatalogPageAdmin extends ModelAdmin
             )->setHTMLID('Form_EditForm');
 
             // Validation
-            if(singleton($this->modelClass)->hasMethod('getCMSValidator')) {
+            if (singleton($this->modelClass)->hasMethod('getCMSValidator')) {
                 $detailValidator = singleton($this->modelClass)->getCMSValidator();
                 $listField->getConfig()->getComponentByType('GridFieldDetailForm')->setValidator($detailValidator);
             }
@@ -45,6 +46,11 @@ class CatalogPageAdmin extends ModelAdmin
             $editFormAction = Controller::join_links($this->Link($this->sanitiseClassName($this->modelClass)), 'EditForm');
             $form->setFormAction($editFormAction);
             $form->setAttribute('data-pjax-fragment', 'CurrentForm');
+
+            /** add sorting if we have a field for... */
+            if (class_exists('GridFieldSortableRows') && $sortField = $model->getSortFieldname()) {
+                $fieldConfig->addComponent(new GridFieldSortableRows($sortField));
+            }
 
         } else if (method_exists($model, 'getAdminListField')) {
 
@@ -70,7 +76,6 @@ class CatalogPageAdmin extends ModelAdmin
         $this->extend('updateEditForm', $form);
         return $form;
     }
-
 
 
 }

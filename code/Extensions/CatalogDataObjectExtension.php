@@ -5,19 +5,26 @@ class CatalogDataObjectExtension extends DataExtension
     private static $parentClass;
     private static $can_duplicate = true;
 
+    /**
+     * Name of the sorting column. SiteTree has a col named "Sort", we use this as default
+     * @var string
+     */
+    private static $sort_column = 'Sort';
+
     private static $db = array(
         'Sort' => 'Int'
     );
 
     private static $summary_fields = array(
-        'getEnabledStatus' => 'Enabled'
+        'isPublishedNice' => 'Enabled'
     );
 
-    public function getEnabledStatus()
-    {
-        return $this->owner->isPublished() ? 'Yes' : 'No';
-    }
-
+    /**
+     * Adds functionality to CMS fields
+     *
+     * @param FieldList $fields
+     * @throws Exception
+     */
     public function updateCMSFields(FieldList $fields)
     {
         $fields->removeByName('Version');
@@ -46,6 +53,8 @@ class CatalogDataObjectExtension extends DataExtension
     }
 
     /**
+     * Returns if this object is new or not
+     *
      * @return bool
      */
     public function isNew()
@@ -58,7 +67,10 @@ class CatalogDataObjectExtension extends DataExtension
             return false;
         }
     }
+
     /**
+     * Returns if this object is published or not.
+     *
      * @return bool
      */
     public function isPublished()
@@ -73,9 +85,12 @@ class CatalogDataObjectExtension extends DataExtension
             $table = $p;
         }
 
-        return (bool) DB::query("SELECT \"ID\" FROM \"{$table}_Live\" WHERE \"ID\" = {$this->owner->ID}")->value();
+        return (bool)DB::query("SELECT \"ID\" FROM \"{$table}_Live\" WHERE \"ID\" = {$this->owner->ID}")->value();
     }
+
     /**
+     * Helper function to return nice booleans for GridFields
+     *
      * @param $value
      * @return string
      */
@@ -83,14 +98,20 @@ class CatalogDataObjectExtension extends DataExtension
     {
         return $value ? 'Yes' : 'No';
     }
+
     /**
+     * Nice string to tell if the object is published or not
+     *
      * @return mixed
      */
     public function isPublishedNice()
     {
         return $this->getBooleanNice($this->isPublished());
     }
+
     /**
+     * Nice string to tell if the object is modified or not
+     *
      * @return mixed
      */
     public function isModifiedNice()
@@ -98,10 +119,16 @@ class CatalogDataObjectExtension extends DataExtension
         return $this->getBooleanNice($this->stagesDiffer('Stage', 'Live'));
     }
 
+    /**
+     * Publishes an object
+     *
+     * @return bool
+     */
+
     public function doPublish()
     {
         $original = Versioned::get_one_by_stage($this->owner->ClassName, "Live", "\"{$this->owner->ClassName}\".\"ID\" = {$this->owner->ID}");
-        if(!$original) $original = new $this->owner->ClassName();
+        if (!$original) $original = new $this->owner->ClassName();
 
         //$this->PublishedByID = Member::currentUser()->ID;
         $this->owner->write();
@@ -114,9 +141,14 @@ class CatalogDataObjectExtension extends DataExtension
         return true;
     }
 
+    /**
+     * Unpublishes an object
+     *
+     * @return bool
+     */
     public function doUnpublish()
     {
-        if(!$this->owner->ID) return false;
+        if (!$this->owner->ID) return false;
         $origStage = Versioned::current_stage();
         Versioned::reading_stage('Live');
         // This way our ID won't be unset
@@ -125,11 +157,22 @@ class CatalogDataObjectExtension extends DataExtension
         Versioned::reading_stage($origStage);
         // If we're on the draft site, then we can update the status.
         // Otherwise, these lines will resurrect an inappropriate record
-        if(DB::query("SELECT \"ID\" FROM \"{$this->owner->ClassName}\" WHERE \"ID\" = {$this->owner->ID}")->value()
-            && Versioned::current_stage() != 'Live') {
+        if (DB::query("SELECT \"ID\" FROM \"{$this->owner->ClassName}\" WHERE \"ID\" = {$this->owner->ID}")->value()
+            && Versioned::current_stage() != 'Live'
+        ) {
             $this->owner->write();
         }
 
         return true;
+    }
+
+    /**
+     * Gets the fieldname for the sort column. Uses in owner's config for $sort_column
+     *
+     * @return string
+     */
+    public function getSortFieldname()
+    {
+        return $this->owner->config()->get('sort_column');
     }
 }

@@ -157,7 +157,7 @@ class CatalogDataObjectGridFieldDetailForm_ItemRequest extends GridFieldDetailFo
         Versioned::reading_stage('Live');
 
         if ($newObject) {
-            Controller::curr()->redirect(Controller::curr()->Link() . '/EditForm/field/' . $this->record->ClassName .'/item/' . $newPage->ID);
+            Controller::curr()->redirect(Controller::curr()->Link() . '/EditForm/field/' . $this->record->ClassName . '/item/' . $newPage->ID);
         }
     }
 
