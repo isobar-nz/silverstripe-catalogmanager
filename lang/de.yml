@@ -1,0 +1,13 @@
+de:
+  CatalogManager:
+    PARENTPAGE: 'Übergeordnete Seite'
+    ENABLE: 'Aktivieren'
+    DISABLE: 'Deaktivieren'
+    DUPLICATE: 'Duplizieren'
+    SUCCESS: '{title} wurde {type}.'
+    ERROR: 'Es trat ein Fehler auf. Bitte laden Sie die Seite neu'
+    BUTTONUNPUBLISH: 'Veröffentlichung zurücknehmen'
+    BUTTONUNPUBLISHDESC: 'Veröffentlichung zurücknehmen'
+    BUTTONSAVEPUBLISH: 'Speichern & Veröffentlichen'
+    BUTTONSAVEPUBLISHDESC: 'Speichern & Veröffentlichen'
+    PUBLISHPERMISSIONFAILURE: 'Keine Berechtigung zum Veröffentlichen'
