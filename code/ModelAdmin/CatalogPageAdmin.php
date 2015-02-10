@@ -59,7 +59,6 @@ class CatalogPageAdmin extends ModelAdmin
 
             /** add sorting if we have a field for... */
             if (class_exists('GridFieldSortableRows') && $sortField = $model->getSortFieldname()) {
-                error_log($sortField);
                 $fieldConfig->addComponent(new GridFieldSortableRows($sortField));
             }
 
