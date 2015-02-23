@@ -73,8 +73,6 @@ class CatalogPageExtension extends DataExtension
                 throw new Exception('You must create a parent page of class ' . implode(',', $parentClass));
             }
 
-        } else {
-            throw new Exception('Parent class ' . implode(',', $parentClass) . ' does not exist.');
         }
     }
 
