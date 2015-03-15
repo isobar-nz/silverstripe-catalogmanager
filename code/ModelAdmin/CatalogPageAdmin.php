@@ -93,10 +93,17 @@ class CatalogPageAdmin extends ModelAdmin
      */
     public function onAfterGridFieldRowSort($pages)
     {
+        $modelClass = $this->modelClass;
         $model = singleton($this->modelClass);
+        $sortField = $model->getSortFieldname();
+
+        // if the sort is the default, then we should update SiteTree. If its a custom sort, update the model.
+        if ($sortField == 'Sort') {
+            $modelClass = 'SiteTree';
+        }
         if ($model::config()->get('automatic_live_sort') == true) {
             foreach ($pages as $page) {
-                DB::query("UPDATE " . $this->modelClass . "_Live SET CustomSort=" . $page->{$model->getSortFieldname()} . " WHERE ID=" . $page->ID);
+                DB::query("UPDATE " . $modelClass . "_Live SET " . $model->getSortFieldname() . "=" . $page->{$model->getSortFieldname()} . " WHERE ID=" . $page->ID);
             }
         }
 
