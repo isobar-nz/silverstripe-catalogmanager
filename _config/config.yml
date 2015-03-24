@@ -6,3 +6,8 @@ After: 'framework/*','cms/*'
 Page:
   extensions:
     - CategoryPageHierarchyExtension
+
+SiteTree:
+  required_permission:
+    - SITETREE_VIEW_ALL
+    - SITETREE_EDIT_ALL
