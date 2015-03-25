@@ -7,7 +7,7 @@ Page:
   extensions:
     - CategoryPageHierarchyExtension
 
-SiteTree:
+SiteConfig:
   required_permission:
     - SITETREE_VIEW_ALL
     - SITETREE_EDIT_ALL
