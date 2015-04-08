@@ -12,6 +12,15 @@ class CatalogPageAdmin extends ModelAdmin
     private static $menu_icon = 'silverstripe-catalogmanager/images/catalog.png';
 
     /**
+     * Initialize requirements for this view
+     */
+    public function init()
+    {
+        parent::init();
+        Requirements::javascript(CMS_DIR . '/javascript/CMSMain.EditForm.js');
+    }
+
+    /**
      * @inheritdoc
      */
     public function getEditForm($id = null, $fields = null)
