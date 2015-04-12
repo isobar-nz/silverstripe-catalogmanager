@@ -1,5 +1,5 @@
 {
-    "name": "littlegiant/silverstripe-catalogmanager",
+    "name": "dospuntocero/silverstripe-catalogmanager",
     "type": "silverstripe-module",
     "description": "Catalog Manager provides extension for ModelAdmin editing of SiteTree instances",
     "license": "MIT",
