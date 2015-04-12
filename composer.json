@@ -19,8 +19,5 @@
             "email": "james.fallwell@littlegiant.co.nz",
             "role": "Developer"
         }
-    ],
-    "require": {
-        "undefinedoffset/sortablegridfield": "~0.4.0"
-    }
+    ]
 }
