@@ -112,7 +112,9 @@ class CatalogPageAdmin extends ModelAdmin
         }
         if ($model::config()->get('automatic_live_sort') == true) {
             foreach ($pages as $page) {
-                DB::query("UPDATE " . $modelClass . "_Live SET " . $model->getSortFieldname() . "=" . $page->{$model->getSortFieldname()} . " WHERE ID=" . $page->ID);
+                if(get_class($page) == $modelClass) {
+                    DB::query("UPDATE " . $modelClass . "_Live SET " . $model->getSortFieldname() . "=" . $page->{$model->getSortFieldname()} . " WHERE ID=" . $page->ID);
+                }
             }
         }
 
