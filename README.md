@@ -58,6 +58,22 @@ CatalogPageAdmin:
 
 ### Options
 
+#### Hide pages in CMS
+
+When managing pages with catalogmanager you might want to hide this pages in CMS. You can do this by adding the `HidePageChildrenExtension` to the holder page, e.g.
+
+```yml
+CatalogPage:
+  extensions:
+    - CatalogPageExtension
+  parentClass:
+    - 'CatalogParentPage'
+CatalogParentPage:
+  extensions:
+    - HidePageChildrenExtension
+```
+
+#### Duplication of pages
 You can disable the ability to duplicate pages through the `can_duplicate` configuration setting per object.
 
 ```yml
@@ -68,6 +84,8 @@ CatalogPage:
     - 'CatalogParentPage'
   can_duplicate: false
 ```
+
+#### Drag and drop sorting
 
 You can add drag and drop sorting using GridFieldSortableRows when you add the `sort_column` setting to your configuration.
 Uses column `Sort` by default which is default in SiteTree and is added by CatalogDataObjectExtension.
