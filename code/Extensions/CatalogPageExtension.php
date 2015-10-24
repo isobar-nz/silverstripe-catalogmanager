@@ -56,7 +56,7 @@ class CatalogPageExtension extends DataExtension
      */
     public function updateCMSFields(FieldList $fields)
     {
-        $parentClass = $this->owner->stat('parentClass');
+        $parentClass = $this->getParentClasses();
 
         if ($pages = $this->getCatalogParents()) {
 
@@ -74,6 +74,22 @@ class CatalogPageExtension extends DataExtension
             }
 
         }
+    }
+
+    /**
+     * Returns the parent classes defined from the config as an array
+     * @return array
+     */
+    public function getParentClasses()
+    {
+        $parentClasses = $this->owner->stat('parentClass');
+
+        if(!is_array($parentClasses)) {
+            return array($parentClasses);
+        }
+
+        return $parentClasses;
+
     }
 
     /**
@@ -97,7 +113,7 @@ class CatalogPageExtension extends DataExtension
      */
     public function getCatalogParents()
     {
-        $parentClass = $this->owner->stat('parentClass');
+        $parentClass = $this->getParentClasses();
         if (count($parentClass)) {
             $pages = SiteTree::get()->filter(array('ClassName' => array_values($parentClass)));
             return $pages;
