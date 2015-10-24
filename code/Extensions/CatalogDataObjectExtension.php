@@ -52,7 +52,7 @@ class CatalogDataObjectExtension extends DataExtension
         $fields->removeByName('Version');
         $fields->removeByName('Versions');
 
-        $parentClass = $this->owner->stat('parentClass');
+        $parentClass = $this->getParentClasses();
 
         if ($pages = DataObject::get()->filter(array('ClassName' => array_values($parentClass)))) {
 
@@ -186,6 +186,22 @@ class CatalogDataObjectExtension extends DataExtension
         }
 
         return true;
+    }
+
+    /**
+     * Returns the parent classes defined from the config as an array
+     * @return array
+     */
+    public function getParentClasses()
+    {
+        $parentClasses = $this->owner->stat('parentClass');
+
+        if(!is_array($parentClasses)) {
+            return array($parentClasses);
+        }
+
+        return $parentClasses;
+
     }
 
     /**
