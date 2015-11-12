@@ -84,7 +84,7 @@ class CatalogPageExtension extends DataExtension
     {
         $parentClasses = $this->owner->stat('parentClass');
 
-        if(!is_array($parentClasses)) {
+        if(!is_array($parentClasses) && $parentClasses != null) {
             return array($parentClasses);
         }
 
