@@ -27,7 +27,6 @@ class CatalogPageAdmin extends ModelAdmin
     {
         $model = singleton($this->modelClass);
         if ($model->has_extension('CatalogPageExtension') || $model->has_extension('CatalogDataObjectExtension')) {
-
             $list = $this->getList()->setDataQueryParam(array(
                 'Versioned.stage' => 'Stage'
             ));
@@ -70,9 +69,7 @@ class CatalogPageAdmin extends ModelAdmin
             if (class_exists('GridFieldSortableRows') && $sortField = $model->getSortFieldname()) {
                 $fieldConfig->addComponent(new GridFieldSortableRows($sortField));
             }
-
-        } else if (method_exists($model, 'getAdminListField')) {
-
+        } elseif (method_exists($model, 'getAdminListField')) {
             $form = CMSForm::create(
                 $this,
                 'EditForm',
@@ -86,10 +83,8 @@ class CatalogPageAdmin extends ModelAdmin
             $editFormAction = Controller::join_links($this->Link($this->sanitiseClassName($this->modelClass)), 'EditForm');
             $form->setFormAction($editFormAction);
             $form->setAttribute('data-pjax-fragment', 'CurrentForm');
-
         } else {
             $form = parent::getEditForm();
-
         }
 
         $this->extend('updateEditForm', $form);
@@ -112,13 +107,10 @@ class CatalogPageAdmin extends ModelAdmin
         }
         if ($model::config()->get('automatic_live_sort') == true) {
             foreach ($pages as $page) {
-                if($page instanceof $modelClass) {
+                if ($page instanceof $modelClass) {
                     DB::query("UPDATE " . $modelClass . "_Live SET " . $model->getSortFieldname() . "=" . $page->{$model->getSortFieldname()} . " WHERE ID=" . $page->ID);
                 }
             }
         }
-
     }
-
-
 }

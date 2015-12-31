@@ -118,6 +118,5 @@ class GridfieldPagePublishAction implements GridField_ColumnProvider, GridField_
                 $item->doUnpublish();
             }
         }
-
     }
 }

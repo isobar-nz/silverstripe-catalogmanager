@@ -10,10 +10,9 @@ class TranslatableCatalogExtension extends DataExtension
     /**
      * @param $form
      */
-    function updateImportForm(&$form)
+    public function updateImportForm(&$form)
     {
         $form = $this->LangForm();
-
     }
 
     /**
@@ -21,7 +20,7 @@ class TranslatableCatalogExtension extends DataExtension
      *
      * @return Form
      */
-    function LangForm()
+    public function LangForm()
     {
         $member = Member::currentUser(); //check to see if the current user can switch langs or not
         if (Permission::checkMember($member, 'VIEW_LANGS')) {
@@ -60,10 +59,9 @@ class TranslatableCatalogExtension extends DataExtension
     }
 
 
-    function updateExtraTreeTools(&$html)
+    public function updateExtraTreeTools(&$html)
     {
         $locale = $this->owner->Locale ? $this->owner->Locale : Translatable::get_current_locale();
         $html = $this->LangForm()->forTemplate() . $html;
     }
-
 }

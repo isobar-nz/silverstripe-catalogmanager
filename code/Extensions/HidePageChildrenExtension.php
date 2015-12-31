@@ -5,5 +5,4 @@
  */
 class HidePageChildrenExtension extends Extension
 {
-
 }
