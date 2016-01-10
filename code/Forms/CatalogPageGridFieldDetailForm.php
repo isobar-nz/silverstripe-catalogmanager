@@ -5,7 +5,6 @@
  */
 class CatalogPageGridFieldDetailForm extends GridFieldDetailForm
 {
-
 }
 
 /**
@@ -32,8 +31,9 @@ class CatalogPageGridFieldDetailForm_ItemRequest extends GridFieldDetailForm_Ite
         if (!$this->record->ParentID) {
             // set a parent id for the record, even if it will change
             $parents = $this->record->getCatalogParents();
-            if ($parents && $parents->count())
+            if ($parents && $parents->count()) {
                 $this->record->ParentID = $parents->first()->ID;
+            }
         }
 
         $form = parent::ItemEditForm();
@@ -41,7 +41,6 @@ class CatalogPageGridFieldDetailForm_ItemRequest extends GridFieldDetailForm_Ite
         if ($this->record->has_extension('CatalogPageExtension')
             || $this->record->has_extension('CatalogDataObjectExtension')
         ) {
-
             $actions = $form->Actions();
 
             if ($this->record->ID) {
@@ -71,7 +70,6 @@ class CatalogPageGridFieldDetailForm_ItemRequest extends GridFieldDetailForm_Ite
             }
 
             $form->setActions($actions);
-
         }
 
         $this->extend('updateItemEditForm', $form);
@@ -269,6 +267,4 @@ class CatalogPageGridFieldDetailForm_ItemRequest extends GridFieldDetailForm_Ite
             Controller::curr()->redirect(Controller::curr()->Link() . '/EditForm/field/' . $this->record->ClassName . '/item/' . $newPage->ID);
         }
     }
-
-
 }

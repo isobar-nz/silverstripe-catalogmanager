@@ -59,12 +59,9 @@ class CatalogPageExtension extends DataExtension
         $parentClass = $this->getParentClasses();
 
         if ($pages = $this->getCatalogParents()) {
-
             if ($pages && $pages->exists()) {
                 if ($pages->count() == 1) {
-
                     $fields->addFieldToTab('Root.Main', HiddenField::create('ParentID', 'ParentID', $pages->first()->ID));
-
                 } else {
                     $parentID = $this->owner->ParentID ? : $pages->first()->ID;
                     $fields->addFieldToTab('Root.Main', DropdownField::create('ParentID', _t('CatalogManager.PARENTPAGE', 'Parent Page'), $pages->map('ID', 'Title'), $parentID));
@@ -72,7 +69,6 @@ class CatalogPageExtension extends DataExtension
             } else {
                 throw new Exception('You must create a parent page of class ' . implode(',', $parentClass));
             }
-
         }
     }
 
@@ -84,12 +80,11 @@ class CatalogPageExtension extends DataExtension
     {
         $parentClasses = $this->owner->stat('parentClass');
 
-        if(!is_array($parentClasses) && $parentClasses != null) {
+        if (!is_array($parentClasses) && $parentClasses != null) {
             return array($parentClasses);
         }
 
         return $parentClasses;
-
     }
 
     /**
@@ -120,5 +115,4 @@ class CatalogPageExtension extends DataExtension
         }
         return false;
     }
-
 }
