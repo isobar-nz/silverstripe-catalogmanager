@@ -3,65 +3,81 @@
 /**
  * Class TranslatableCatalogExtension
  */
-class TranslatableCatalogExtension extends DataExtension
+class TranslatableCatalogExtension extends Extension
 {
 
+    /**
+     * @var array
+     */
+    private static $allowed_actions = [
+        'language'
+    ];
 
     /**
-     * @param $form
+     * @return mixed
      */
-    public function updateImportForm(&$form)
+    public function language()
     {
-        $form = $this->LangForm();
+        $request = $this->owner->getRequest();
+        $locale = $request->postVar('Locale');
+        $this->owner->Locale = $locale;
+        return $this->owner->redirect($this->owner->Link("?locale=$locale"));
     }
 
     /**
-     * Returns a form with all languages with languages already used appearing first.
-     *
-     * @return Form
+     * @param $locale
+     * @return mixed
      */
-    public function LangForm()
+    public function getLanguageDropdownField($locale)
     {
-        $member = Member::currentUser(); //check to see if the current user can switch langs or not
-        if (Permission::checkMember($member, 'VIEW_LANGS')) {
-            $field = new LanguageDropdownField(
-                'Locale',
-                _t('CMSMain.LANGUAGEDROPDOWNLABEL', 'Language'),
-                array(),
-                'SiteTree',
-                'Locale-English',
-                singleton('SiteTree')
-            );
-            $field->setValue(Translatable::get_current_locale());
-        } else {
-            // user doesn't have permission to switch langs
-            // so just show a string displaying current language
-            $field = new LiteralField(
-                'Locale',
-                i18n::get_locale_name(Translatable::get_current_locale())
-            );
+        $locale = Translatable::get_current_locale();
+        $translation = _t('CMSMain.LANGUAGEDROPDOWNLABEL', 'Language');
+        $field = LanguageDropdownField::create(
+            'Locale',
+            $translation,
+            array(),
+            'SiteTree',
+            'Locale-English',
+            singleton('SiteTree')
+        );
+        $field->setValue($locale);
+        return $field;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getLanguageField()
+    {
+        $locale = Translatable::get_current_locale();
+
+        if ($member = Member::currentUser()) {
+            if (Permission::checkMember($member, 'VIEW_LANGS')) {
+                return $this->getLanguageDropdownField($locale);
+            }
         }
 
-        $form = new Form(
-            $this->owner,
-            'LangForm',
-            new FieldList(
-                $field
-            ),
-            new FieldList(
-                new FormAction('selectlang', _t('CMSMain_left.GO', 'Go'))
-            )
+        return LiteralField::create(
+            'Locale',
+            i18n::get_locale_name($locale)
         );
-        $form->unsetValidator();
-        $form->addExtraClass('nostyle');
 
-        return $form;
     }
 
-
-    public function updateExtraTreeTools(&$html)
+    /**
+     * @return mixed
+     */
+    public function getLanguageSelectorForm()
     {
-        $locale = $this->owner->Locale ? $this->owner->Locale : Translatable::get_current_locale();
-        $html = $this->LangForm()->forTemplate() . $html;
+        $fields = FieldList::create($this->getLanguageField());
+        return Form::create(
+            $this->owner,
+            'language',
+            $fields,
+            FieldList::create(FormAction::create(
+                'language',
+                'Go'
+            ))
+        );
     }
 }
