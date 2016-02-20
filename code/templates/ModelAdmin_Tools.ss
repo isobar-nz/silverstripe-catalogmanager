@@ -11,7 +11,9 @@
         <% end_if %>
         <% if $LanguageSelectorForm %>
             <h3 class="cms-panel-header"><% _t('ModelAdmin_Tools_ss.LANGUAGE', 'Language') %></h3>
-            $LanguageSelectorForm
+			<div class="CMSMain">
+				$LanguageSelectorForm
+			</div>
         <% end_if %>
     </div>
     <div class="cms-panel-content-collapsed">
