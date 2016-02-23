@@ -7,13 +7,6 @@ class TranslatableCatalogExtension extends Extension
 {
 
     /**
-     * @var array
-     */
-    private static $allowed_actions = [
-        'language'
-    ];
-
-    /**
      * @return mixed
      */
     public function language()
@@ -72,7 +65,7 @@ class TranslatableCatalogExtension extends Extension
         $fields = FieldList::create($this->getLanguageField());
         return Form::create(
             $this->owner,
-            'language',
+            'LangForm',
             $fields,
             FieldList::create(FormAction::create(
                 'language',
