@@ -7,13 +7,6 @@ class TranslatableCatalogExtension extends Extension
 {
 
     /**
-     * @var array
-     */
-    private static $allowed_actions = array(
-        'language'
-	);
-
-    /**
      * @return mixed
      */
     public function language()
