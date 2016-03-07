@@ -21,6 +21,6 @@
         }
     ],
     "require": {
-        "undefinedoffset/sortablegridfield": "~0.4.0"
+        "undefinedoffset/sortablegridfield": "~0.6.0"
     }
 }
