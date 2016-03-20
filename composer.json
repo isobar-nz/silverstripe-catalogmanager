@@ -21,6 +21,7 @@
         }
     ],
     "require": {
-        "undefinedoffset/sortablegridfield": "~0.6.0"
+        "undefinedoffset/sortablegridfield": "~0.6.0",
+        "silverstripe/cms": "^3.3"
     }
 }
