@@ -1,22 +1,16 @@
-<div class="cms-content-tools west cms-panel cms-panel-layout" id="cms-content-tools-ModelAdmin" data-expandOnClick="true" data-layout-type="border">
-    <div class="cms-panel-content center">
-        <% if $SearchForm %>
-            <h3 class="cms-panel-header"><% _t('ModelAdmin_Tools_ss.FILTER', 'Filter') %></h3>
-            $SearchForm
-        <% end_if %>
-
-        <% if $ImportForm %>
-            <h3 class="cms-panel-header"><% _t('ModelAdmin_Tools_ss.IMPORT', 'Import') %></h3>
-            $ImportForm
-        <% end_if %>
-        <% if $LanguageSelectorForm %>
-            <h3 class="cms-panel-header"><% _t('ModelAdmin_Tools_ss.LANGUAGE', 'Language') %></h3>
-			<div class="CMSMain">
-				$LanguageSelectorForm
-			</div>
-        <% end_if %>
-    </div>
-    <div class="cms-panel-content-collapsed">
+<div id="cms-content-tools-ModelAdmin" class="cms-content-filters">
+    <% if $SearchForm %>
         <h3 class="cms-panel-header"><% _t('ModelAdmin_Tools_ss.FILTER', 'Filter') %></h3>
-    </div>
+        $SearchForm
+    <% end_if %>
+    <% if $ImportForm %>
+        <h3 class="cms-panel-header"><% _t('ModelAdmin_Tools_ss.IMPORT', 'Import') %></h3>
+        $ImportForm
+    <% end_if %>
+    <% if $LanguageSelectorForm %>
+        <h3 class="cms-panel-header"><% _t('ModelAdmin_Tools_ss.LANGUAGE', 'Language') %></h3>
+        <div class="CMSMain">
+            $LanguageSelectorForm
+        </div>
+    <% end_if %>
 </div>
