@@ -18,7 +18,8 @@ class CatalogPageExtension extends DataExtension
     private static $can_duplicate = true;
 
     /**
-     * Name of the sorting column. SiteTree has a col named "Sort", we use this as default
+     * Name of the sorting column. SiteTree has a column named "Sort", we use this as default.
+     *
      * @config
      * @var string
      */
@@ -63,7 +64,7 @@ class CatalogPageExtension extends DataExtension
                 if ($pages->count() == 1) {
                     $fields->addFieldToTab('Root.Main', HiddenField::create('ParentID', 'ParentID', $pages->first()->ID));
                 } else {
-                    $parentID = $this->owner->ParentID ? : $pages->first()->ID;
+                    $parentID = $this->owner->ParentID ?: $pages->first()->ID;
                     $fields->addFieldToTab('Root.Main', DropdownField::create('ParentID', _t('CatalogManager.PARENTPAGE', 'Parent Page'), $pages->map('ID', 'Title'), $parentID));
                 }
             } else {
@@ -98,7 +99,7 @@ class CatalogPageExtension extends DataExtension
     {
         return ($this->owner->config()->get('sort_column') === false)
             ? false
-            : ($this->owner->config()->get('sort_column') ? : 'Sort');
+            : ($this->owner->config()->get('sort_column') ?: 'Sort');
     }
 
     /**
