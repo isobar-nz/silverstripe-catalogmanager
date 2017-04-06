@@ -110,10 +110,12 @@ class CatalogPageExtension extends DataExtension
     public function getCatalogParents()
     {
         $parentClass = $this->getParentClasses();
+        $parents = false;
         if (count($parentClass)) {
             $pages = SiteTree::get()->filter(array('ClassName' => array_values($parentClass)));
-            return $pages;
+            $parents = $pages;
         }
-        return false;
+        $this->owner->extend('updateCatalogParents', $parents);
+        return $parents;
     }
 }
