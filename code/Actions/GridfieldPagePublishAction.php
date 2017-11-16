@@ -1,5 +1,11 @@
 <?php
 
+use SilverStripe\Forms\GridField\GridField_ColumnProvider;
+use SilverStripe\Forms\GridField\GridField_ActionProvider;
+use SilverStripe\Forms\GridField\GridField_FormAction;
+use SilverStripe\Forms\GridField\GridField;
+use SilverStripe\ORM\ValidationException;
+
 /**
  * Gridfield Action to publish / unpublish a page in catalog manager
  * @author Werner Krauß <werner.krauss@netwerkstatt.at>
@@ -118,6 +124,5 @@ class GridfieldPagePublishAction implements GridField_ColumnProvider, GridField_
                 $item->doUnpublish();
             }
         }
-
     }
 }

@@ -1,15 +1,26 @@
 <?php
 
+use SilverStripe\ORM\DB;
+use SilverStripe\Admin\ModelAdmin;
+use SilverStripe\View\Requirements;
+use SilverStripe\Forms\GridField\GridField;
+use SilverStripe\Forms\GridField\GridFieldConfig_RecordEditor;
+use SilverStripe\Forms\FieldList;
+use SilverStripe\Forms\FormAction;
+use SilverStripe\Forms\Form;
+use SilverStripe\Control\Controller;
+
 /**
  * Class CatalogPageAdmin
  */
-class CatalogPageAdmin extends ModelAdmin
+abstract class CatalogPageAdmin extends ModelAdmin
 {
+
     /**
      * @config
      * @var string
      */
-    private static $menu_icon = 'silverstripe-catalogmanager/images/catalog.png';
+    private static $menu_icon = 'silverstripe-catalogmanager-master/images/catalog.png';
 
     /**
      * Initialize requirements for this view
@@ -17,7 +28,8 @@ class CatalogPageAdmin extends ModelAdmin
     public function init()
     {
         parent::init();
-        Requirements::javascript(CMS_DIR . '/javascript/CMSMain.EditForm.js');
+        //todo
+        Requirements::javascript(/*CMS_DIR . */'/cms/javascript/CMSMain.EditForm.js');
     }
 
     /**
@@ -27,7 +39,6 @@ class CatalogPageAdmin extends ModelAdmin
     {
         $model = singleton($this->modelClass);
         if ($model->has_extension('CatalogPageExtension') || $model->has_extension('CatalogDataObjectExtension')) {
-
             $list = $this->getList()->setDataQueryParam(array(
                 'Versioned.stage' => 'Stage'
             ));
@@ -42,7 +53,8 @@ class CatalogPageAdmin extends ModelAdmin
                     ->addComponent(new GridfieldPagePublishAction())
             );
 
-            $form = CMSForm::create(
+//            $form = CMSForm::create(
+            $form = Form::create(
                 $this,
                 'EditForm',
                 new FieldList($listField),
@@ -59,7 +71,7 @@ class CatalogPageAdmin extends ModelAdmin
                 $gridField->setItemRequestClass('CatalogPageGridFieldDetailForm_ItemRequest');
             }
 
-            $form->setResponseNegotiator($this->getResponseNegotiator());
+//            $form->setResponseNegotiator($this->getResponseNegotiator());
             $form->addExtraClass('cms-edit-form cms-panel-padded center');
             $form->setTemplate($this->getTemplatesWithSuffix('_EditForm'));
             $editFormAction = Controller::join_links($this->Link($this->sanitiseClassName($this->modelClass)), 'EditForm');
@@ -70,26 +82,23 @@ class CatalogPageAdmin extends ModelAdmin
             if (class_exists('GridFieldSortableRows') && $sortField = $model->getSortFieldname()) {
                 $fieldConfig->addComponent(new GridFieldSortableRows($sortField));
             }
-
-        } else if (method_exists($model, 'getAdminListField')) {
-
-            $form = CMSForm::create(
+        } elseif (method_exists($model, 'getAdminListField')) {
+//            $form = CMSForm::create(
+            $form = Form::create(
                 $this,
                 'EditForm',
                 new FieldList($model->getAdminListField()),
                 new FieldList(FormAction::create('doSave', 'Save'))
             )->setHTMLID('Form_EditForm');
 
-            $form->setResponseNegotiator($this->getResponseNegotiator());
+//            $form->setResponseNegotiator($this->getResponseNegotiator());
             $form->addExtraClass('cms-edit-form cms-panel-padded center');
             $form->setTemplate($this->getTemplatesWithSuffix('_EditForm'));
             $editFormAction = Controller::join_links($this->Link($this->sanitiseClassName($this->modelClass)), 'EditForm');
             $form->setFormAction($editFormAction);
             $form->setAttribute('data-pjax-fragment', 'CurrentForm');
-
         } else {
             $form = parent::getEditForm();
-
         }
 
         $this->extend('updateEditForm', $form);
@@ -112,13 +121,10 @@ class CatalogPageAdmin extends ModelAdmin
         }
         if ($model::config()->get('automatic_live_sort') == true) {
             foreach ($pages as $page) {
-                if(get_class($page) == $modelClass) {
+                if ($page instanceof $modelClass) {
                     DB::query("UPDATE " . $modelClass . "_Live SET " . $model->getSortFieldname() . "=" . $page->{$model->getSortFieldname()} . " WHERE ID=" . $page->ID);
                 }
             }
         }
-
     }
-
-
 }

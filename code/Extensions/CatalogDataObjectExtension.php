@@ -1,5 +1,13 @@
 <?php
 
+use SilverStripe\ORM\DataExtension;
+use SilverStripe\Forms\FieldList;
+use SilverStripe\ORM\DB;
+use SilverStripe\ORM\DataObject;
+use SilverStripe\Forms\HiddenField;
+use SilverStripe\Forms\DropdownField;
+use SilverStripe\Versioned\Versioned;
+
 /**
  * Class CatalogDataObjectExtension
  */
@@ -52,23 +60,19 @@ class CatalogDataObjectExtension extends DataExtension
         $fields->removeByName('Version');
         $fields->removeByName('Versions');
 
-        $parentClass = $this->owner->stat('parentClass');
+        $parentClass = $this->getParentClasses();
 
         if ($pages = DataObject::get()->filter(array('ClassName' => array_values($parentClass)))) {
-
             if ($pages->exists()) {
                 if ($pages->count() == 1) {
-
                     $fields->push(HiddenField::create('ParentID', 'ParentID', $pages->first()->ID));
-
                 } else {
-                    $parentID = $this->owner->ParentID ? : $pages->first()->ID;
+                    $parentID = $this->owner->ParentID ?: $pages->first()->ID;
                     $fields->push(DropdownField::create('ParentID', _t('CatalogManager.PARENTPAGE', 'Parent Page'), $pages->map('ID', 'Title'), $parentID));
                 }
             } else {
                 throw new Exception('You must create a parent page of class ' . implode(',', $parentClass));
             }
-
         } else {
             throw new Exception('Parent class ' . implode(',', $parentClass) . ' does not exist.');
         }
@@ -150,7 +154,9 @@ class CatalogDataObjectExtension extends DataExtension
     public function doPublish()
     {
         $original = Versioned::get_one_by_stage($this->owner->ClassName, "Live", "\"{$this->owner->ClassName}\".\"ID\" = {$this->owner->ID}");
-        if (!$original) $original = new $this->owner->ClassName();
+        if (!$original) {
+            $original = new $this->owner->ClassName();
+        }
 
         //$this->PublishedByID = Member::currentUser()->ID;
         $this->owner->write();
@@ -170,7 +176,9 @@ class CatalogDataObjectExtension extends DataExtension
      */
     public function doUnpublish()
     {
-        if (!$this->owner->ID) return false;
+        if (!$this->owner->ID) {
+            return false;
+        }
         $origStage = Versioned::current_stage();
         Versioned::reading_stage('Live');
         // This way our ID won't be unset
@@ -186,6 +194,21 @@ class CatalogDataObjectExtension extends DataExtension
         }
 
         return true;
+    }
+
+    /**
+     * Returns the parent classes defined from the config as an array
+     * @return array
+     */
+    public function getParentClasses()
+    {
+        $parentClasses = $this->owner->stat('parentClass');
+
+        if (!is_array($parentClasses)) {
+            return array($parentClasses);
+        }
+
+        return $parentClasses;
     }
 
     /**

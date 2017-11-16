@@ -1,11 +1,16 @@
 <?php
 
+use SilverStripe\Forms\GridField\GridFieldDetailForm;
+use SilverStripe\Forms\GridField\GridFieldDetailForm_ItemRequest;
+use SilverStripe\Forms\FormAction;
+use SilverStripe\Versioned\Versioned;
+use SilverStripe\Control\Controller;
+
 /**
  * Class CatalogDataObjectGridFieldDetailForm
  */
 class CatalogDataObjectGridFieldDetailForm extends GridFieldDetailForm
 {
-
 }
 
 /**
@@ -28,7 +33,6 @@ class CatalogDataObjectGridFieldDetailForm_ItemRequest extends GridFieldDetailFo
         if ($this->record->has_extension('CatalogPageExtension')
             || $this->record->has_extension('CatalogDataObjectExtension')
         ) {
-
             $actions = $form->Actions();
 
             if ($this->record->ID) {
@@ -55,11 +59,9 @@ class CatalogDataObjectGridFieldDetailForm_ItemRequest extends GridFieldDetailFo
                             ->setAttribute('data-icon', 'accept')
                     );
                 }
-
             }
 
             $form->setActions($actions);
-
         }
 
         $this->extend('updateItemEditForm', $form);
@@ -258,6 +260,4 @@ class CatalogDataObjectGridFieldDetailForm_ItemRequest extends GridFieldDetailFo
             Controller::curr()->redirect(Controller::curr()->Link() . '/EditForm/field/' . $this->record->ClassName . '/item/' . $newObject->ID);
         }
     }
-
-
 }

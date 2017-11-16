@@ -1,6 +1,6 @@
 ---
-Name: catalog-manager
-After: 'framework/*','cms/*'
+Name: catalog-manager-lg
+#After: 'framework/*','cms/*'
 ---
 
 Page:

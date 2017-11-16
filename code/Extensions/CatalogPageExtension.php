@@ -1,5 +1,11 @@
 <?php
 
+use SilverStripe\ORM\DataExtension;
+use SilverStripe\CMS\Model\SiteTree;
+use SilverStripe\Forms\FieldList;
+use SilverStripe\Forms\HiddenField;
+use SilverStripe\Forms\DropdownField;
+
 /**
  * Class CatalogPageExtension
  */
@@ -18,7 +24,8 @@ class CatalogPageExtension extends DataExtension
     private static $can_duplicate = true;
 
     /**
-     * Name of the sorting column. SiteTree has a col named "Sort", we use this as default
+     * Name of the sorting column. SiteTree has a column named "Sort", we use this as default.
+     *
      * @config
      * @var string
      */
@@ -56,24 +63,35 @@ class CatalogPageExtension extends DataExtension
      */
     public function updateCMSFields(FieldList $fields)
     {
-        $parentClass = $this->owner->stat('parentClass');
+        $parentClass = $this->getParentClasses();
 
         if ($pages = $this->getCatalogParents()) {
-
             if ($pages && $pages->exists()) {
                 if ($pages->count() == 1) {
-
                     $fields->addFieldToTab('Root.Main', HiddenField::create('ParentID', 'ParentID', $pages->first()->ID));
-
                 } else {
-                    $parentID = $this->owner->ParentID ? : $pages->first()->ID;
+                    $parentID = $this->owner->ParentID ?: $pages->first()->ID;
                     $fields->addFieldToTab('Root.Main', DropdownField::create('ParentID', _t('CatalogManager.PARENTPAGE', 'Parent Page'), $pages->map('ID', 'Title'), $parentID));
                 }
             } else {
                 throw new Exception('You must create a parent page of class ' . implode(',', $parentClass));
             }
-
         }
+    }
+
+    /**
+     * Returns the parent classes defined from the config as an array
+     * @return array
+     */
+    public function getParentClasses()
+    {
+        $parentClasses = $this->owner->stat('parentClass');
+
+        if (!is_array($parentClasses) && $parentClasses != null) {
+            return array($parentClasses);
+        }
+
+        return $parentClasses;
     }
 
     /**
@@ -87,7 +105,7 @@ class CatalogPageExtension extends DataExtension
     {
         return ($this->owner->config()->get('sort_column') === false)
             ? false
-            : ($this->owner->config()->get('sort_column') ? : 'Sort');
+            : ($this->owner->config()->get('sort_column') ?: 'Sort');
     }
 
     /**
@@ -97,12 +115,13 @@ class CatalogPageExtension extends DataExtension
      */
     public function getCatalogParents()
     {
-        $parentClass = $this->owner->stat('parentClass');
+        $parentClass = $this->getParentClasses();
+        $parents = false;
         if (count($parentClass)) {
             $pages = SiteTree::get()->filter(array('ClassName' => array_values($parentClass)));
-            return $pages;
+            $parents = $pages;
         }
-        return false;
+        $this->owner->extend('updateCatalogParents', $parents);
+        return $parents;
     }
-
 }
