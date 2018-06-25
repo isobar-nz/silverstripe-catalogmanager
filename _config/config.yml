@@ -1,13 +1,12 @@
 ---
-Name: catalog-manager
-After: 'framework/*','cms/*'
+Name: catalogmanager
 ---
 
 Page:
   extensions:
-    - CategoryPageHierarchyExtension
+    - LittleGiant\CatalogManager\Extensions\CategoryPageHierarchyExtension
 
-SiteConfig:
+SilverStripe\SiteConfig\SiteConfig:
   required_permission:
     - SITETREE_VIEW_ALL
     - SITETREE_EDIT_ALL

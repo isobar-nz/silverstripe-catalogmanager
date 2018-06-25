@@ -1,6 +1,7 @@
 de:
-  CatalogManager:
+  LittleGiant\CatalogManager\Extensions\CatalogPageExtension:
     PARENTPAGE: 'Übergeordnete Seite'
+  LittleGiant\CatalogManager\Actions\GridFieldPublishAction:
     ENABLE: 'Aktivieren'
     DISABLE: 'Deaktivieren'
     DUPLICATE: 'Duplizieren'

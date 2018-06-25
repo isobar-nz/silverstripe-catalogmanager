@@ -23,8 +23,8 @@ Add the following to a configuration yml file:
 CatalogPage:
   extensions:
     - CatalogPageExtension
-  parentClass:
-    - 'CatalogParentPage'
+  parent_classes:
+    - CatalogParentPage
 ```
 
 Where `CatalogPage` is the page type you wish to administer (e.g. BlogEntry) and `CatalogParentPage` is where the pages
@@ -66,7 +66,7 @@ When managing pages with catalogmanager you might want to hide this pages in CMS
 CatalogPage:
   extensions:
     - CatalogPageExtension
-  parentClass:
+  parent_classes:
     - 'CatalogParentPage'
 CatalogParentPage:
   extensions:
@@ -80,7 +80,7 @@ You can disable the ability to duplicate pages through the `can_duplicate` confi
 CatalogPage:
   extensions:
     - CatalogPageExtension
-  parentClass:
+  parent_classes:
     - 'CatalogParentPage'
   can_duplicate: false
 ```
@@ -94,7 +94,7 @@ Uses column `Sort` by default which is default in SiteTree and is added by Catal
 CatalogPage:
   extensions:
     - CatalogPageExtension
-  parentClass:
+  parent_classes:
     - 'CatalogParentPage'
   sort_column: 'CustomSort'
 ```
@@ -105,7 +105,7 @@ If you want to disable drag and drop sorting just set `sort_column` to false
 CatalogPage:
   extensions:
     - CatalogPageExtension
-  parentClass:
+  parent_classes:
     - 'CatalogParentPage'
   sort_column: false
 ```
@@ -117,7 +117,7 @@ you can set the configuration option `automatic_live_sort` to false through your
 CatalogPage:
   extensions:
     - CatalogPageExtension
-  parentClass:
+  parent_classes:
     - 'CatalogParentPage'
   automatic_live_sort: false
 ```
