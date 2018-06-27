@@ -1,1 +1,4 @@
 .idea/
+resources/
+vendor/
+composer.lock

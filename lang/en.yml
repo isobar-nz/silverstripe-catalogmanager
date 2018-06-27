@@ -1,6 +1,7 @@
 en:
-  CatalogManager:
+  LittleGiant\CatalogManager\Extensions\CatalogPageExtension:
     PARENTPAGE: 'Parent Page'
+  LittleGiant\CatalogManager\Actions\GridFieldPublishAction:
     ENABLE: 'Enable'
     DISABLE: 'Disable'
     DUPLICATE: 'Duplicate'
