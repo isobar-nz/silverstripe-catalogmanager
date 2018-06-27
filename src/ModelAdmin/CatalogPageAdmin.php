@@ -122,7 +122,7 @@ abstract class CatalogPageAdmin extends ModelAdmin
 
         foreach ($items as $item) {
             if ($item instanceof $this->modelClass) {
-                DB::query("UPDATE `{$tableName}_Live` SET `{$model->getSortFieldname()}`=\"{$item->{$sortField}}\" WHERE ID={$item->ID}");
+                DB::query("UPDATE \"{$tableName}_Live\" SET \"{$model->getSortFieldname()}\"=\"{$item->{$sortField}}\" WHERE \"ID\"=\"{$item->ID}\"");
             }
         }
     }
