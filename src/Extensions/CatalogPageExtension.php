@@ -16,11 +16,20 @@ use SilverStripe\ORM\DataExtension;
  */
 class CatalogPageExtension extends DataExtension
 {
+    use ExtensionDefinesDefaultConfig;
+
+    const CONFIG_SETTINGS_WITH_DEFAULTS = [
+        'parent_classes',
+        'can_duplicate',
+        'sort_column',
+        'automatic_live_sort',
+    ];
+
     /**
      * @config
      * @var array
      */
-    private static $parent_classes;
+    private static $parent_classes = [];
 
     /**
      * @config
