@@ -154,6 +154,8 @@ class CatalogPageExtension extends DataExtension
      */
     public function canCreate($member)
     {
-        return $this->getCatalogParents()->count() > 0;
+        return $this->getCatalogParents()->count() === 0
+            ? false
+            : null;
     }
 }
