@@ -146,4 +146,14 @@ class CatalogPageExtension extends DataExtension
             return $sortColumn ?: 'Sort';
         }
     }
+
+    /**
+     * Prevent object creation if no parents exist.
+     * @param \SilverStripe\Security\Member|null $member
+     * @return bool
+     */
+    public function canCreate($member)
+    {
+        return $this->getCatalogParents()->count() > 0;
+    }
 }

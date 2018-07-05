@@ -104,7 +104,6 @@ abstract class CatalogPageAdmin extends ModelAdmin
         )->setHTMLID('Form_EditForm');
 
         if ($model->getCatalogParents()->count() === 0) {
-            $fieldConfig->removeComponentsByType(GridFieldAddNewButton::class);
             $form->setMessage($this->getMissingParentsMessage($model), ValidationResult::TYPE_WARNING);
         }
 
