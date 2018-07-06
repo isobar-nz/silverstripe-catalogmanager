@@ -10,12 +10,15 @@ use SilverStripe\Forms\FieldList;
 use SilverStripe\Forms\Form;
 use SilverStripe\Forms\FormAction;
 use SilverStripe\Forms\GridField\GridField;
+use SilverStripe\Forms\GridField\GridFieldAddNewButton;
 use SilverStripe\Forms\GridField\GridFieldConfig_RecordEditor;
 use SilverStripe\Forms\GridField\GridFieldDeleteAction;
 use SilverStripe\Forms\GridField\GridFieldDetailForm;
 use SilverStripe\Forms\GridField\GridFieldFilterHeader;
+use SilverStripe\ORM\DataObject;
 use SilverStripe\ORM\DataObjectSchema;
 use SilverStripe\ORM\DB;
+use SilverStripe\ORM\ValidationResult;
 use SilverStripe\Versioned\Versioned;
 use SilverStripe\View\Requirements;
 use Symbiote\GridFieldExtensions\GridFieldOrderableRows;
@@ -93,12 +96,60 @@ abstract class CatalogPageAdmin extends ModelAdmin
             $fieldConfig->addComponent(new GridFieldOrderableRows($sortField));
         }
 
-        return Form::create(
+        $form = Form::create(
             $this,
             'EditForm',
             new FieldList($listField),
             new FieldList()
         )->setHTMLID('Form_EditForm');
+
+        if ($model->getCatalogParents()->count() === 0) {
+            $form->setMessage($this->getMissingParentsMessage($model), ValidationResult::TYPE_WARNING);
+        }
+
+        return $form;
+    }
+
+    /**
+     * @param \SilverStripe\ORM\DataObject|CatalogPageExtension $model
+     * @return string
+     */
+    protected function getMissingParentsMessage(DataObject $model)
+    {
+        return _t(self::class . '.PARENT_REQUIRED',
+            'You must create a {parent_class_list} before you can create a {model_name}.', [
+                'parent_class_list' => $this->getParentClassesForMessage($model->getParentClasses()),
+                'model_name'        => $model->i18n_singular_name(),
+            ]);
+    }
+
+    /**
+     * @param string[] $classes
+     * @return string
+     */
+    protected function getParentClassesForMessage(array $classes)
+    {
+        $parentNames = [];
+        foreach ($classes as $parentClass) {
+            if ($parentClass === $this->modelClass) {
+                continue;
+            }
+
+            /** @var DataObject $parent */
+            $parent = singleton($parentClass);
+            $parentNames[] = $parent->i18n_singular_name();
+        }
+
+        if (count($parentNames) === 1) {
+            return $parentNames[0];
+        }
+
+        if (count($parentNames) === 2) {
+            return "{$parentNames[0]} or {$parentNames[1]}";
+        }
+
+        $last = array_pop($parentNames);
+        return implode(', ', $parentNames) . " or {$last}";
     }
 
     /**
