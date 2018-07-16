@@ -150,30 +150,4 @@ abstract class CatalogPageAdmin extends ModelAdmin
         $last = array_pop($parentNames);
         return implode(', ', $parentNames) . " or {$last}";
     }
-
-    /**
-     * Hook to update sort column on live versions of items after a sort has occured.
-     * @param $items
-     */
-    public function onAfterGridFieldRowSort($items)
-    {
-        /** @var \LittleGiant\CatalogManager\Extensions\CatalogPageExtension|\SilverStripe\CMS\Model\SiteTree $model */
-        $model = singleton($this->modelClass);
-        if (!$model::config()->get('automatic_live_sort')) {
-            return;
-        }
-
-        // if the sort is the default, then we should update SiteTree. If its a custom sort, update the model.
-        $sortField = $model->getSortFieldName();
-        $tableName = DataObjectSchema::singleton()->tableForField($this->modelClass, $sortField);
-        if ($tableName === null) {
-            throw new \Exception("Sort field {$sortField} could not be found in table hierarchy for {$this->modelClass}.");
-        }
-
-        foreach ($items as $item) {
-            if ($item instanceof $this->modelClass) {
-                DB::query("UPDATE \"{$tableName}_Live\" SET \"{$model->getSortFieldname()}\"=\"{$item->{$sortField}}\" WHERE \"ID\"=\"{$item->ID}\"");
-            }
-        }
-    }
 }

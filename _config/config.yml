@@ -10,3 +10,7 @@ SilverStripe\SiteConfig\SiteConfig:
   required_permission:
     - SITETREE_VIEW_ALL
     - SITETREE_EDIT_ALL
+
+Symbiote\GridFieldExtensions\GridFieldOrderableRows:
+  extensions:
+    - LittleGiant\CatalogManager\Extensions\AutoPublishSortExtension
