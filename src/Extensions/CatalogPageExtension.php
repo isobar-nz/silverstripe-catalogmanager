@@ -4,6 +4,7 @@ namespace LittleGiant\CatalogManager\Extensions;
 
 use Exception;
 use SilverStripe\CMS\Model\SiteTree;
+use SilverStripe\Core\Config\Config;
 use SilverStripe\Forms\DropdownField;
 use SilverStripe\Forms\FieldList;
 use SilverStripe\Forms\HiddenField;
@@ -138,13 +139,25 @@ class CatalogPageExtension extends DataExtension
      */
     public function getSortFieldName()
     {
-        $sortColumn = $this->owner->config()->get('sort_column');
+        return static::getClassSortFieldName($this->owner);
+    }
 
-        if ($sortColumn === false) {
-            return null;
-        } else {
-            return $sortColumn ?: 'Sort';
-        }
+    /**
+     * Gets the field name for a class's sort column. As CatalogPageExtension is applied to subclasses of SiteTree,
+     * 'Sort' is default.
+     * Can be overwritten using $sort_column config on extended class.
+     * Set $sort_column config to false to disable sorting in the gridfield
+     *
+     * @param string|object $class
+     * @return null|string
+     */
+    public static function getClassSortFieldName($class)
+    {
+        $sortColumn = Config::forClass($class)->get('sort_column');
+
+        return $sortColumn === false
+            ? null
+            : ($sortColumn ?: Config::forClass(static::class)->get('sort_column'));
     }
 
     /**
