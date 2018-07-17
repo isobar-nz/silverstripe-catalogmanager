@@ -22,7 +22,6 @@ class CatalogPageExtension extends DataExtension
     const CONFIG_SETTINGS_WITH_DEFAULTS = [
         'parent_classes',
         'can_duplicate',
-        'sort_column',
         'automatic_live_sort',
     ];
 
@@ -37,14 +36,6 @@ class CatalogPageExtension extends DataExtension
      * @var bool
      */
     private static $can_duplicate = true;
-
-    /**
-     * Name of the sorting column. SiteTree has a column named "Sort", we use this as default.
-     *
-     * @config
-     * @var string
-     */
-    private static $sort_column = 'Sort';
 
     /**
      * @config
@@ -157,7 +148,7 @@ class CatalogPageExtension extends DataExtension
 
         return $sortColumn === false
             ? null
-            : ($sortColumn ?: Config::forClass(static::class)->get('sort_column'));
+            : ($sortColumn ?: 'Sort');
     }
 
     /**
