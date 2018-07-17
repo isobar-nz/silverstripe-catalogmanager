@@ -35,7 +35,7 @@ class AutoPublishSortExtension extends Extension
         }
 
         foreach ($sortedIDs as $sortValue => $itemID) {
-            DB::query("UPDATE \"{$tableName}_Live\" SET \"{$sortField}\"={$sortValue} WHERE \"ID\"={$itemID}");
+            DB::prepared_query('UPDATE "' . $tableName . '_Live" SET "' . $sortField . '"=? WHERE "ID"=?', [$sortValue, $itemID]);
         }
     }
 }
