@@ -73,6 +73,7 @@ class CatalogPageExtension extends DataExtension
         $pages = $this->getCatalogParents();
 
         if ($pages === null) {
+            // Root page
             return;
         }
 
@@ -113,7 +114,7 @@ class CatalogPageExtension extends DataExtension
         $parentClasses = $this->getParentClasses();
         $parents = null;
 
-        if ($parentClasses !== null) {
+        if (!empty($parentClasses)) {
             $parents = SiteTree::get()->filter('ClassName', $parentClasses);
         }
         $this->owner->extend('updateCatalogParents', $parents);
@@ -158,7 +159,8 @@ class CatalogPageExtension extends DataExtension
      */
     public function canCreate($member)
     {
-        return $this->getCatalogParents()->count() === 0
+        $parentCandidates = $this->getCatalogParents();
+        return $parentCandidates !== null && $parentCandidates->count() === 0
             ? false
             : null;
     }

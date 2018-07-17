@@ -102,7 +102,8 @@ abstract class CatalogPageAdmin extends ModelAdmin
             new FieldList()
         )->setHTMLID('Form_EditForm');
 
-        if ($model->getCatalogParents()->count() === 0) {
+        $parentCandidates = $model->getCatalogParents();
+        if ($parentCandidates !== null && $parentCandidates->count() === 0) {
             $form->setMessage($this->getMissingParentsMessage($model), ValidationResult::TYPE_WARNING);
         }
 
