@@ -69,23 +69,20 @@ class CatalogPageExtension extends DataExtension
      */
     public function updateCMSFields(FieldList $fields)
     {
-        $parentClass = $this->getParentClasses();
-        $pages = $this->getCatalogParents();
-
-        if ($pages === null) {
+        $parentPages = $this->getCatalogParents();
+        if ($parentPages === null) {
             // Root page
             return;
         }
 
-        $parentCount = $pages->count();
-
+        $parentCount = count($parentPages);
         if ($parentCount === 0) {
-            throw new Exception('You must create a parent page with one of these classes: ' . implode(', ', $parentClass));
+            throw new Exception('You must create a parent page with one of these classes: ' . implode(', ', $this->getParentClasses()));
         } elseif ($parentCount === 1) {
-            $field = HiddenField::create('ParentID', 'ParentID', $pages->first()->ID);
+            $field = HiddenField::create('ParentID', 'ParentID', $parentPages->first()->ID);
         } else {
-            $defaultParentID = $this->owner->ParentID ?: $pages->first()->ID;
-            $field = DropdownField::create('ParentID', _t(__CLASS__ . '.PARENTPAGE', 'Parent Page'), $pages->map(), $defaultParentID);
+            $defaultParentID = $this->owner->ParentID ?: $parentPages->first()->ID;
+            $field = DropdownField::create('ParentID', _t(__CLASS__ . '.PARENTPAGE', 'Parent Page'), $parentPages->map(), $defaultParentID);
         }
 
         $fields->addFieldToTab('Root.Main', $field);
@@ -159,8 +156,7 @@ class CatalogPageExtension extends DataExtension
      */
     public function canCreate($member)
     {
-        $parentCandidates = $this->getCatalogParents();
-        return $parentCandidates === null || $parentCandidates->count() === 0
+        return count($this->getCatalogParents()) === 0
             ? false
             : null;
     }
