@@ -47,7 +47,7 @@ abstract class CatalogPageAdmin extends ModelAdmin
         $model = singleton($this->modelClass);
 
         if ($model->has_extension(CatalogPageExtension::class)) {
-            $form = $this->getCatalogEditForm($id, $fields, $model);
+            $form = $this->getCatalogEditForm($model, $id, $fields);
         } elseif (method_exists($model, 'getAdminListField')) {
             $form = Form::create(
                 $this,
@@ -64,12 +64,12 @@ abstract class CatalogPageAdmin extends ModelAdmin
     }
 
     /**
-     * @param null $id
-     * @param null $fields
      * @param \SilverStripe\CMS\Model\SiteTree|\LittleGiant\CatalogManager\Extensions\CatalogPageExtension $model
+     * @param null|string $id
+     * @param null|string $fields
      * @return \SilverStripe\Forms\Form
      */
-    protected function getCatalogEditForm($id = null, $fields = null, $model)
+    protected function getCatalogEditForm($model, $id = null, $fields = null)
     {
         $originalStage = Versioned::get_stage();
         Versioned::set_stage(Versioned::DRAFT);
@@ -102,7 +102,7 @@ abstract class CatalogPageAdmin extends ModelAdmin
             new FieldList()
         )->setHTMLID('Form_EditForm');
 
-        if ($model->getCatalogParents()->count() === 0) {
+        if (count($model->getCatalogParents()) === 0) {
             $form->setMessage($this->getMissingParentsMessage($model), ValidationResult::TYPE_WARNING);
         }
 

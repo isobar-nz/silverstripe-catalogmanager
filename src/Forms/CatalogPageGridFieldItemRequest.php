@@ -23,11 +23,12 @@ class CatalogPageGridFieldItemRequest extends VersionedGridFieldItemRequest
      */
     public function ItemEditForm()
     {
-        if (!$this->record->ParentID) {
-            // set a parent id for the record, even if it will change
+        if (!empty($this->record) && !$this->record->ParentID) {
+            // Set a default parent id for the record, even if it will change
             $parents = $this->record->getCatalogParents();
-            if ($parents !== null && $parents->exists()) {
-                $this->record->ParentID = $parents->first()->ID;
+            $first = $parents !== null ? $parents->first() : null;
+            if ($first !== null) {
+                $this->record->ParentID = $first->ID;
             }
         }
 

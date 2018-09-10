@@ -3,6 +3,7 @@
 namespace LittleGiant\CatalogManager\Extensions;
 
 use SilverStripe\CMS\Model\SiteTree;
+use SilverStripe\Core\Config\Config;
 use SilverStripe\Core\Extension;
 use SilverStripe\ORM\DataObject;
 use SilverStripe\ORM\DB;
@@ -23,9 +24,7 @@ class AutoPublishSortExtension extends Extension
     public function onAfterReorderItems(SS_List &$list, array $values, array $sortedIDs)
     {
         $modelClass = $list->dataClass();
-        /** @var CatalogPageExtension|SiteTree $model */
-        $model = singleton($modelClass);
-        if (!$model::config()->get('automatic_live_sort')) {
+        if (!Config::forClass($modelClass)->get('automatic_live_sort')) {
             return;
         }
 
