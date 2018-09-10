@@ -103,7 +103,7 @@ abstract class CatalogPageAdmin extends ModelAdmin
         )->setHTMLID('Form_EditForm');
 
         $parentCandidates = $model->getCatalogParents();
-        if ($parentCandidates !== null && $parentCandidates->count() === 0) {
+        if ($parentCandidates === null || $parentCandidates->count() === 0) {
             $form->setMessage($this->getMissingParentsMessage($model), ValidationResult::TYPE_WARNING);
         }
 

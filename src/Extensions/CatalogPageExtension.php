@@ -160,7 +160,7 @@ class CatalogPageExtension extends DataExtension
     public function canCreate($member)
     {
         $parentCandidates = $this->getCatalogParents();
-        return $parentCandidates !== null && $parentCandidates->count() === 0
+        return $parentCandidates === null || $parentCandidates->count() === 0
             ? false
             : null;
     }

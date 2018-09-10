@@ -25,16 +25,14 @@ class CatalogPageGridFieldItemRequest extends VersionedGridFieldItemRequest
     {
         $editForm = parent::ItemEditForm();
 
-        // Already has parent
-        if ($this->record->ParentID) return $editForm;
+        if ($this->record->ParentID) {
+            // Already has parent
+            return $editForm;
+        }
 
         // Set a default parent id for the record, even if it will change
         $parents = $this->record->getCatalogParents();
-
-        if ($parents === null) return $editForm; // Root page
-
-        $first = $parents->first();
-        if ($first !== null) {
+        if ($parents !== null && $first = $parents->first()) {
             $this->record->ParentID = $first->ID;
         }
 
