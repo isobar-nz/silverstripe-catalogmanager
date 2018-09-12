@@ -4,6 +4,7 @@ namespace LittleGiant\CatalogManager\Extensions;
 
 use Exception;
 use SilverStripe\CMS\Model\SiteTree;
+use SilverStripe\Core\ClassInfo;
 use SilverStripe\Core\Config\Config;
 use SilverStripe\Forms\DropdownField;
 use SilverStripe\Forms\FieldList;
@@ -23,6 +24,7 @@ class CatalogPageExtension extends DataExtension
         'parent_classes',
         'can_duplicate',
         'automatic_live_sort',
+        'include_parent_subclasses',
     ];
 
     /**
@@ -42,6 +44,12 @@ class CatalogPageExtension extends DataExtension
      * @var bool
      */
     private static $automatic_live_sort = true;
+
+    /**
+     * @config
+     * @var bool
+     */
+    private static $include_parent_subclasses = false;
 
     /**
      * @inheritdoc
@@ -90,15 +98,29 @@ class CatalogPageExtension extends DataExtension
 
     /**
      * Returns the parent classes defined from the config as an array
-     * @return array
+     * @return string[]
      */
     public function getParentClasses()
     {
         $parentClasses = $this->owner->config()->get('parent_classes');
 
-        return $parentClasses === null || is_array($parentClasses)
-            ? $parentClasses
-            : [$parentClasses];
+        if (empty($parentClasses)) {
+            return [];
+        } elseif (!is_array($parentClasses)) {
+            $parentClasses = [$parentClasses];
+        }
+
+        if ($this->owner->config()->get('include_parent_subclasses')) {
+            $parentClasses = array_reduce($parentClasses, function (array $list, $parentClass) {
+                foreach (ClassInfo::subclassesFor($parentClass) as $key => $class) {
+                    $list[$key] = $class;
+                }
+
+                return $list;
+            }, []);
+        }
+
+        return $parentClasses;
     }
 
     /**
