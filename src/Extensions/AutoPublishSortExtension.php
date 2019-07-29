@@ -36,6 +36,8 @@ class AutoPublishSortExtension extends Extension
 
         foreach ($sortedIDs as $sortValue => $itemID) {
             DB::prepared_query('UPDATE "' . $tableName . '_Live" SET "' . $sortField . '"=? WHERE "ID"=?', [$sortValue, $itemID]);
+            $version = DB::prepared_query('SELECT Version FROM "' . $tableName . '_Versions" WHERE "RecordID"=? ORDER BY "ID" DESC', [$itemID]);
+            DB::prepared_query('UPDATE "' . $tableName . '_Live" SET "Version"=? WHERE "ID"=?', [$version->first()['Version'], $itemID]);
         }
     }
 }
