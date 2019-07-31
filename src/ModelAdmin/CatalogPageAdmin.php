@@ -78,7 +78,6 @@ abstract class CatalogPageAdmin extends ModelAdmin
             false,
             $this->getList(),
             $fieldConfig = GridFieldConfig_RecordEditor::create(static::config()->get('page_length'))
-                ->removeComponentsByType(GridFieldFilterHeader::class)
                 ->removeComponentsByType(GridFieldDeleteAction::class)
                 ->addComponent(new GridfieldPublishAction())
         );
