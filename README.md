@@ -20,11 +20,11 @@ $ composer require littlegiant/silverstripe-catalogmanager
 Add the following to a configuration yml file:
 
 ```yml
-CatalogPage:
+MyNamespace\MyCatalogPage:
   extensions:
-    - CatalogPageExtension
+    - LittleGiant\CatalogManager\Extensions\CatalogPageExtension
   parent_classes:
-    - CatalogParentPage
+    - MyNamespace\MyCatalogParentPage
 ```
 
 Where `CatalogPage` is the page type you wish to administer (e.g. BlogEntry) and `CatalogParentPage` is where the pages
@@ -34,9 +34,9 @@ will provide users with a drop down to choose which page should be the parent.
 You can also create pages in the root of the project (i.e. ParentID = 0) by not providing a parent class.
 
 ```yml
-LandingPage:
+MyNamespace\MyLandingPage:
   extensions:
-    - CatalogPageExtension
+    - LittleGiant\CatalogManager\Extensions\CatalogPageExtension
 ```
 
 Then simply extend `CatalogPageAdmin` instead of `ModelAdmin`.
@@ -45,17 +45,6 @@ Then simply extend `CatalogPageAdmin` instead of `ModelAdmin`.
 
 You can also manage DataObjects through the `CatalogDataObjectExtension`
 
-### Translations
-
-If you are using the translatable module, you can use the TranslatableCatalogExtension to provide functionality for
-choosing languages.
-
-```yml
-CatalogPageAdmin:
-  extensions:
-    - TranslatableCatalogExtension
-```
-
 ### Options
 
 #### Hide pages in CMS
@@ -63,25 +52,25 @@ CatalogPageAdmin:
 When managing pages with catalogmanager you might want to hide this pages in CMS. You can do this by adding the `HidePageChildrenExtension` to the holder page, e.g.
 
 ```yml
-CatalogPage:
+MyNamespace\MyCatalogPage:
   extensions:
-    - CatalogPageExtension
+    - LittleGiant\CatalogManager\Extensions\CatalogPageExtension
   parent_classes:
-    - 'CatalogParentPage'
-CatalogParentPage:
+    - MyNamespace\MyCatalogParentPage
+MyNamespace\MyCatalogParentPage:
   extensions:
-    - HidePageChildrenExtension
+    - LittleGiant\CatalogManager\Extensions\HidePageChildrenExtension
 ```
 
 #### Duplication of pages
 You can disable the ability to duplicate pages through the `can_duplicate` configuration setting per object.
 
 ```yml
-CatalogPage:
+MyNamespace\MyCatalogPage:
   extensions:
-    - CatalogPageExtension
+    - LittleGiant\CatalogManager\Extensions\CatalogPageExtension
   parent_classes:
-    - 'CatalogParentPage'
+    - MyNamespace\MyCatalogParentPage
   can_duplicate: false
 ```
 
@@ -91,22 +80,22 @@ You can add drag and drop sorting using GridFieldSortableRows when you add the `
 Uses column `Sort` by default which is default in SiteTree and is added by CatalogDataObjectExtension.
 
 ```yml
-CatalogPage:
+MyNamespace\MyCatalogPage:
   extensions:
-    - CatalogPageExtension
+    - LittleGiant\CatalogManager\Extensions\CatalogPageExtension
   parent_classes:
-    - 'CatalogParentPage'
+    - MyNamespace\MyCatalogParentPage
   sort_column: 'CustomSort'
 ```
 
 If you want to disable drag and drop sorting just set `sort_column` to false
 
 ```yml
-CatalogPage:
+MyNamespace\MyCatalogPage:
   extensions:
-    - CatalogPageExtension
+    - LittleGiant\CatalogManager\Extensions\CatalogPageExtension
   parent_classes:
-    - 'CatalogParentPage'
+    - MyNamespace\MyCatalogParentPage
   sort_column: false
 ```
 
@@ -114,11 +103,11 @@ Sort columns automatically update the sort column of both the staged and live ve
 you can set the configuration option `automatic_live_sort` to false through your config.
 
 ```yml
-CatalogPage:
+MyNamespace\MyCatalogPage:
   extensions:
-    - CatalogPageExtension
+    - LittleGiant\CatalogManager\Extensions\CatalogPageExtension
   parent_classes:
-    - 'CatalogParentPage'
+    - MyNamespace\MyCatalogParentPage
   automatic_live_sort: false
 ```
 
