@@ -178,8 +178,10 @@ class CatalogPageExtension extends DataExtension
      */
     public function canCreate($member)
     {
-        return count($this->getCatalogParents()) === 0
-            ? false
-            : null;
+        $catalogParents = $this->getCatalogParents();
+        if(isset($catalogParents) && count($catalogParents) === 0)
+            return false;
+        else
+            return true;
     }
 }
