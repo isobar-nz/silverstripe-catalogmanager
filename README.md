@@ -87,7 +87,7 @@ CatalogPage:
 
 #### Drag and drop sorting
 
-You can add drag and drop sorting using GridFieldSortableRows when you add the `sort_column` setting to your configuration.
+You can add drag and drop sorting using GridFieldOrderableRows when you add the `sort_column` setting to your configuration.
 Uses column `Sort` by default which is default in SiteTree and is added by CatalogDataObjectExtension.
 
 ```yml

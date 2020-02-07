@@ -25,6 +25,7 @@ class CatalogPageAdmin extends ModelAdmin
      */
     public function getEditForm($id = null, $fields = null)
     {
+        /** @var DataObject|CatalogPageExtension|CatalogDataObjectExtension $model */
         $model = singleton($this->modelClass);
         if ($model->has_extension('CatalogPageExtension') || $model->has_extension('CatalogDataObjectExtension')) {
             $list = $this->getList()->setDataQueryParam(array(
@@ -66,8 +67,8 @@ class CatalogPageAdmin extends ModelAdmin
             $form->setAttribute('data-pjax-fragment', 'CurrentForm');
 
             /** add sorting if we have a field for... */
-            if (class_exists('GridFieldSortableRows') && $sortField = $model->getSortFieldname()) {
-                $fieldConfig->addComponent(new GridFieldSortableRows($sortField));
+            if ($sortField = $model->getSortFieldname()) {
+                $fieldConfig->addComponent(new GridFieldOrderableRows($sortField));
             }
         } elseif (method_exists($model, 'getAdminListField')) {
             $form = CMSForm::create(
