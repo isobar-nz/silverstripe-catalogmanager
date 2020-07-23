@@ -2,25 +2,28 @@
 
 namespace LittleGiant\CatalogManager\ModelAdmin;
 
+use SilverStripe\ORM\DB;
+use SilverStripe\Forms\Form;
+use SilverStripe\ORM\DataObject;
+use SilverStripe\Forms\FieldList;
+use SilverStripe\Admin\ModelAdmin;
+use SilverStripe\Forms\FormAction;
+use SilverStripe\View\Requirements;
+use SilverStripe\Versioned\Versioned;
+use SilverStripe\ORM\DataObjectSchema;
+use SilverStripe\ORM\ValidationResult;
+use SilverStripe\Forms\GridField\GridField;
+use SilverStripe\Forms\GridField\GridFieldDetailForm;
+use SilverStripe\Forms\GridField\GridFieldPrintButton;
+use SilverStripe\Forms\GridField\GridFieldDeleteAction;
+use SilverStripe\Forms\GridField\GridFieldExportButton;
+use SilverStripe\Forms\GridField\GridFieldFilterHeader;
+use SilverStripe\Forms\GridField\GridFieldImportButton;
+use Symbiote\GridFieldExtensions\GridFieldOrderableRows;
 use LittleGiant\CatalogManager\Actions\GridFieldPublishAction;
+use SilverStripe\Forms\GridField\GridFieldConfig_RecordEditor;
 use LittleGiant\CatalogManager\Extensions\CatalogPageExtension;
 use LittleGiant\CatalogManager\Forms\CatalogPageGridFieldItemRequest;
-use SilverStripe\Admin\ModelAdmin;
-use SilverStripe\Forms\FieldList;
-use SilverStripe\Forms\Form;
-use SilverStripe\Forms\FormAction;
-use SilverStripe\Forms\GridField\GridField;
-use SilverStripe\Forms\GridField\GridFieldConfig_RecordEditor;
-use SilverStripe\Forms\GridField\GridFieldDeleteAction;
-use SilverStripe\Forms\GridField\GridFieldDetailForm;
-use SilverStripe\Forms\GridField\GridFieldFilterHeader;
-use SilverStripe\ORM\DataObject;
-use SilverStripe\ORM\DataObjectSchema;
-use SilverStripe\ORM\DB;
-use SilverStripe\ORM\ValidationResult;
-use SilverStripe\Versioned\Versioned;
-use SilverStripe\View\Requirements;
-use Symbiote\GridFieldExtensions\GridFieldOrderableRows;
 
 /**
  * Class CatalogPageAdmin
@@ -58,7 +61,7 @@ abstract class CatalogPageAdmin extends ModelAdmin
         } else {
             $form = parent::getEditForm();
         }
-
+        
         $this->extend('updateEditForm', $form);
         return $form;
     }
@@ -73,11 +76,14 @@ abstract class CatalogPageAdmin extends ModelAdmin
     {
         $originalStage = Versioned::get_stage();
         Versioned::set_stage(Versioned::DRAFT);
+        $exportButton = new GridFieldExportButton('buttons-before-left');
+        $exportButton->setExportColumns($this->getExportFields());
         $listField = GridField::create(
             $this->sanitiseClassName($this->modelClass),
             false,
             $this->getList(),
             $fieldConfig = GridFieldConfig_RecordEditor::create(static::config()->get('page_length'))
+                ->addComponent($exportButton)
                 ->removeComponentsByType(GridFieldDeleteAction::class)
                 ->addComponent(new GridfieldPublishAction())
         );
@@ -92,6 +98,14 @@ abstract class CatalogPageAdmin extends ModelAdmin
         $sortField = $model->getSortFieldName();
         if ($sortField !== null) {
             $fieldConfig->addComponent(new GridFieldOrderableRows($sortField));
+        }
+        
+        if ($this->showImportForm) {
+            $fieldConfig->addComponent(
+                GridFieldImportButton::create('buttons-before-left')
+                    ->setImportForm($this->ImportForm())
+                    ->setModalTitle(_t('SilverStripe\\Admin\\ModelAdmin.IMPORT', 'Import from CSV'))
+            );
         }
 
         $form = Form::create(
