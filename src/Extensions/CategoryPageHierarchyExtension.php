@@ -20,7 +20,7 @@ class CategoryPageHierarchyExtension extends DataExtension
      * @param \SilverStripe\ORM\DataList $stageChildren
      * @param $context
      */
-    public function augmentAllChildrenIncludingDeleted(&$stageChildren, &$context)
+    public function augmentAllChildrenIncludingDeleted(&$stageChildren)
     {
         if ($this->shouldFilter() && $this->owner->hasExtension(HidePageChildrenExtension::class)) {
             $stageChildren = $stageChildren->exclude('ClassName', $this->getExcludedSiteTreeClassNames());
