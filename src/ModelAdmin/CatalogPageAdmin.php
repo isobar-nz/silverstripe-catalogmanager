@@ -100,8 +100,9 @@ abstract class CatalogPageAdmin extends ModelAdmin
             new FieldList($listField),
             new FieldList()
         )->setHTMLID('Form_EditForm');
-
-        if (count($model->getCatalogParents()) === 0) {
+        
+        $parents = $model->getCatalogParents();
+        if ($parents && $parents->count() === 0) {
             $form->setMessage($this->getMissingParentsMessage($model), ValidationResult::TYPE_WARNING);
         }
 
@@ -114,11 +115,14 @@ abstract class CatalogPageAdmin extends ModelAdmin
      */
     protected function getMissingParentsMessage(DataObject $model)
     {
-        return _t(self::class . '.PARENT_REQUIRED',
-            'You must create a {parent_class_list} before you can create a {model_name}.', [
+        return _t(
+            self::class . '.PARENT_REQUIRED',
+            'You must create a {parent_class_list} before you can create a {model_name}.',
+            [
                 'parent_class_list' => $this->getParentClassesForMessage($model->getParentClasses()),
                 'model_name'        => $model->i18n_singular_name(),
-            ]);
+            ]
+        );
     }
 
     /**

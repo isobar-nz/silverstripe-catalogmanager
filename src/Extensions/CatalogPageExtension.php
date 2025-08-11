@@ -9,6 +9,7 @@ use SilverStripe\Core\Config\Config;
 use SilverStripe\Forms\DropdownField;
 use SilverStripe\Forms\FieldList;
 use SilverStripe\Forms\HiddenField;
+use SilverStripe\ORM\ArrayList;
 use SilverStripe\ORM\DataExtension;
 
 /**
@@ -77,23 +78,25 @@ class CatalogPageExtension extends DataExtension
      */
     public function updateCMSFields(FieldList $fields)
     {
-        $parentPages = $this->getCatalogParents();
-        if ($parentPages === null) {
+        if ($this->owner->ParentID === 0) {
             // Root page
             return;
         }
+        
+        $parentPages = $this->getCatalogParents();
+        if ($parentPages) {
+            $parentCount = $parentPages->count();
+            if ($parentCount === 0) {
+                throw new Exception('You must create a parent page with one of these classes: ' . implode(', ', $this->getParentClasses()));
+            } elseif ($parentCount === 1) {
+                $field = HiddenField::create('ParentID', 'ParentID', $parentPages->first()->ID);
+            } else {
+                $defaultParentID = $this->owner->ParentID ?: $parentPages->first()->ID;
+                $field = DropdownField::create('ParentID', _t(__CLASS__ . '.PARENTPAGE', 'Parent Page'), $parentPages->map(), $defaultParentID);
+            }
 
-        $parentCount = count($parentPages);
-        if ($parentCount === 0) {
-            throw new Exception('You must create a parent page with one of these classes: ' . implode(', ', $this->getParentClasses()));
-        } elseif ($parentCount === 1) {
-            $field = HiddenField::create('ParentID', 'ParentID', $parentPages->first()->ID);
-        } else {
-            $defaultParentID = $this->owner->ParentID ?: $parentPages->first()->ID;
-            $field = DropdownField::create('ParentID', _t(__CLASS__ . '.PARENTPAGE', 'Parent Page'), $parentPages->map(), $defaultParentID);
+            $fields->addFieldToTab('Root.Main', $field);
         }
-
-        $fields->addFieldToTab('Root.Main', $field);
     }
 
     /**
@@ -126,7 +129,7 @@ class CatalogPageExtension extends DataExtension
     /**
      * Gets the parents of this page
      *
-     * @return null|\SilverStripe\ORM\DataList
+     * @return \SilverStripe\ORM\DataList|\SilverStripe\ORM\ArrayList
      */
     public function getCatalogParents()
     {
@@ -136,9 +139,10 @@ class CatalogPageExtension extends DataExtension
         if (!empty($parentClasses)) {
             $parents = SiteTree::get()->filter('ClassName', $parentClasses);
         }
+
         $this->owner->extend('updateCatalogParents', $parents);
 
-        return $parents;
+        return $parents ?: new ArrayList();
     }
 
     /**
@@ -180,7 +184,7 @@ class CatalogPageExtension extends DataExtension
     {
         // Deny create if parent doesn't exists
         $parents = $this->getCatalogParents();
-        return (is_null($parents) || count($parents) === 0)
+        return (!$parents || $parents->count() === 0)
             ? false
             : null;
     }

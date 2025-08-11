@@ -26,8 +26,8 @@ class CatalogPageGridFieldItemRequest extends VersionedGridFieldItemRequest
         if (!empty($this->record) && !$this->record->ParentID) {
             // Set a default parent id for the record, even if it will change
             $parents = $this->record->getCatalogParents();
-            $first = $parents !== null ? $parents->first() : null;
-            if ($first !== null) {
+            $first = $parents->first();
+            if ($first && $first->exists()) {
                 $this->record->ParentID = $first->ID;
             }
         }
