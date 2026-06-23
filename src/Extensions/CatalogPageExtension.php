@@ -6,17 +6,17 @@ use Exception;
 use SilverStripe\CMS\Model\SiteTree;
 use SilverStripe\Core\ClassInfo;
 use SilverStripe\Core\Config\Config;
+use SilverStripe\Core\Extension;
 use SilverStripe\Forms\DropdownField;
 use SilverStripe\Forms\FieldList;
 use SilverStripe\Forms\HiddenField;
-use SilverStripe\ORM\DataExtension;
 
 /**
  * Class CatalogPageExtension
  * @package LittleGiant\CatalogManager\Extensions
  * @property \SilverStripe\CMS\Model\SiteTree|\SilverStripe\Versioned\Versioned|\SilverStripe\Versioned\RecursivePublishable $owner
  */
-class CatalogPageExtension extends DataExtension
+class CatalogPageExtension extends Extension
 {
     use ExtensionDefinesDefaultConfig;
 

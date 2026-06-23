@@ -6,13 +6,13 @@ use SilverStripe\Admin\LeftAndMain;
 use SilverStripe\CMS\Model\SiteTree;
 use SilverStripe\Control\Controller;
 use SilverStripe\Core\ClassInfo;
-use SilverStripe\ORM\DataExtension;
+use SilverStripe\Core\Extension;
 
 /**
  * Class CategoryPageHierarchyExtension
  * @package LittleGiant\CatalogManager\Extensions
  */
-class CategoryPageHierarchyExtension extends DataExtension
+class CategoryPageHierarchyExtension extends Extension
 {
     private $excludedSiteTreeClassNames = null;
 

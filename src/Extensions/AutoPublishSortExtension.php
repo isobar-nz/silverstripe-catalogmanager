@@ -7,7 +7,8 @@ use SilverStripe\Core\Config\Config;
 use SilverStripe\Core\Extension;
 use SilverStripe\ORM\DataObject;
 use SilverStripe\ORM\DB;
-use SilverStripe\ORM\SS_List;
+use SilverStripe\ORM\ManyManyList;
+use SilverStripe\Model\List\SS_List;
 
 /**
  * Class AutoPublishSortExtension
@@ -21,7 +22,7 @@ class AutoPublishSortExtension extends Extension
      * @param array $values [listItemID => currentSortValue];
      * @param array $sortedIDs [newSortValue => listItemID]
      */
-    public function onAfterReorderItems(SS_List &$list, array $values, array $sortedIDs)
+    public function onAfterReorderItems(SS_List|ManyManyList &$list, array $values, array $sortedIDs)
     {
         $modelClass = $list->dataClass();
         if (!Config::forClass($modelClass)->get('automatic_live_sort')) {
