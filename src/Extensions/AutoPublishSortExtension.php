@@ -8,7 +8,7 @@ use SilverStripe\Core\Extension;
 use SilverStripe\ORM\DataObject;
 use SilverStripe\ORM\DB;
 use SilverStripe\ORM\ManyManyList;
-use SilverStripe\ORM\SS_List;
+use SilverStripe\Model\List\SS_List;
 
 /**
  * Class AutoPublishSortExtension
